@@ -10,6 +10,7 @@ export const Register = (props) => {
     const [emailError, setEmailError] = useState('');
     const [usernameError, setUsernameError] = useState('');
     const [passwordError, setPasswordError] = useState('');
+    const [registerError, setRegisterError] = useState('');
 
     const navigate = useNavigate();
 
@@ -108,6 +109,7 @@ export const Register = (props) => {
                     </div>
                     <div className="inputContainer">
                         <input className="inputButton" type="button" onClick={onButtonClick} value={'Register'} />
+                        <label className="errorLabel">{registerError}</label>
                     </div>
                 </div>
             </div>

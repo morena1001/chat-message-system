@@ -53,6 +53,13 @@ body {
     color: rgb(85, 65, 32);
 }
 
+.errorLabel {
+    position: absolute;
+    margin-top: 55px;
+    font-size: 14px;
+    color: rgb(233, 56, 56);
+}
+
 .registerLink {
     display: flex;
     flex-direction: column;
