@@ -5,15 +5,82 @@
             "email": "admin1@adminTest.com",
             "username": "admin1",
             "password": "$2b$10$PodjAkND7zaUi3fhIU7aSu4kHiLmvRsZBN5w0wUML.3dtxWgwo47q"
+        },
+        {
+            "id": 2,
+            "email": "admin2@adminTest.com",
+            "username": "admin2",
+            "password": "$2b$10$zeH.avgyCngeVU23p0yKAu9P0x7TdvcaETCujg6P8lPlfc3xoizNS"
+        },
+        {
+            "id": 3,
+            "email": "admin3@adminTest.com",
+            "username": "admin3",
+            "password": "$2b$10$X0bJ/GUPhNj1DK9mcsjJMOF2nQEIm.laH0TBiQcekVklUB6KLwdAC"
+        },
+        {
+            "id": 4,
+            "email": "admin4@adminTest.com",
+            "username": "admin4",
+            "password": "$2b$10$9moYApwU4yhVVkIyohYby.XXcFXHOCRV0PELeIh.EAXZoAFMOebqK"
+        },
+        {
+            "id": 5,
+            "email": "admin5@adminTest.com",
+            "username": "admin5",
+            "password": "$2b$10$UsrvddvowLY5b.THfzr/j.nMkNsCq/lNtIHhwk0vFrqkbxnD.bnk2"
         }
     ],
     "groups": [
-
+        {
+            "id": 1,
+            "members": [
+                1,
+                2,
+                3,
+                4,
+                5
+            ],
+            "name": "First Admin Group"
+        },
+        {
+            "id": 2,
+            "members": [
+                1,
+                2
+            ],
+            "name": "Confidential Conversations"
+        }
     ],
     "members": [
-
+        {
+            "userId": 1,
+            "groupId": 1
+        },
+        {
+            "userId": 2,
+            "groupId": 1
+        },
+        {
+            "userId": 3,
+            "groupId": 1
+        },
+        {
+            "userId": 4,
+            "groupId": 1
+        },
+        {
+            "userId": 5,
+            "groupId": 1
+        },
+        {
+            "userId": 1,
+            "groupId": 2
+        },
+        {
+            "userId": 2,
+            "groupId": 2
+        }
     ],
-    "messages": [
-        
-    ]
+    "messages": []
 }

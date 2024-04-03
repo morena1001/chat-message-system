@@ -1,0 +1,140 @@
+@font-face {
+    font-family: "Montserrat";
+    src: local("Montserrat-Regular"), url("../../fonts/Montserrat-Regular.ttf") format("truetype");
+}
+
+body {
+    font-family: Montserrat;
+    background-color: rgb(228, 217, 195);
+}
+
+.clientContainer {
+    display: flex;
+    /* flex-direction: column; */
+    /* flex-direction: row; */
+}
+
+.leftSideContainer {
+    /* margin-left: -10px; */
+    border: 1px solid black;
+    /* height: 100%;     */
+    height: 200px;
+    width: 600px;
+}
+
+.rightSideContainer {
+    /* margin-left: -1px; */
+    border: 1px solid black;
+    border-left: none;
+    width: 100%;
+}
+
+.headerContainer {
+    border-bottom: 1px solid black;
+    font-size: 25px;
+    /* margin-right: 0px; */
+    height: 34px;
+}
+
+.headerWrapper {
+    display: flex;
+    position: absolute;
+}
+
+.usernameTitle {
+    margin-left: 10px;
+    margin-right: 255px;
+}
+
+.newChat {
+    margin-top: -7px;
+}
+
+.newChatButton {
+    position: absolute;
+    margin-top: 12px;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 50%;
+    font-size: 16px;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+}
+
+.newChatButton:hover {
+    background-color: rgb(185, 141, 69);
+    color: white;
+}
+
+.icon {
+    position: absolute;
+    margin-left: -7px;
+    margin-top: -8px;
+}
+
+.options {
+    margin-top: -7px;
+}
+
+.optionsButton {
+    position: absolute;
+    margin-top: 12px;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 50%;
+    font-size: 16px;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+    margin-left: 34px;
+}
+
+.optionsButton:hover {
+    background-color: rgb(185, 141, 69);
+    color: white;
+}
+
+.optionsIcon {
+    position: absolute;
+    margin-left: -2px;
+    margin-top: -8px;
+}
+
+.chatOptionsButton {
+    margin-top: 5px;
+    position: absolute;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 50%;
+    font-size: 16px;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    margin-right: 10px; 
+}
+
+.chatOptionsButton:hover {
+    background-color: rgb(185, 141, 69);
+    color: white;
+}
+
+.chatOptionsIcon {
+    position:absolute;
+    margin-left: -2px;
+    margin-top: -8px;
+}
+
+.chatTitle {
+    margin-left: 10px;
+    margin-right: 895px;
+}
+
+.searchAndFilterWrapper {
+    display: flex;
+    position: absolute;
+}
+
+

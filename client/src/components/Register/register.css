@@ -60,6 +60,13 @@ body {
     color: rgb(233, 56, 56);
 }
 
+.registerErrorLabel {
+    position: absolute;
+    margin-top: 25px;
+    font-size: 14px;
+    color: rgb(233, 56, 56);
+}
+
 .registerLink {
     display: flex;
     flex-direction: column;

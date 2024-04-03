@@ -85,7 +85,7 @@ export const Login = (props) => {
             }
             else {
                 setLoginError('Password is incorrect. Try again');
-              }
+            }
         })
     }
 

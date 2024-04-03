@@ -16,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 
 
 
+// Authentication for logging in and registering
 app.get("/api", (req, res) => {
   res.send('Auth API.\nPlease use POST /auth & POST /verify for authentication');
   console.log('Auth API.\nPlease use POST /auth & POST /verify for authentication');
@@ -94,12 +95,80 @@ app.post('/check-account', (req, res) => {
   const { username } = req.body;
   const user = data.users.filter((user) => username === user.username);
 
-  return res.status(200).json({
+  res.status(200).json({
     status: user.length === 1 ? "User exists" : "User does not exists",
     userExists: user.length === 1,
     email: user.length === 1 ? user[0].email : ""
   });
 });
+
+app.post('/check-repeating-info', (req, res) => {
+  const { email, username } = req.body;
+  const user = data.users.filter((user) => username === user.username || email === user.email);
+
+  res.status(200).json({
+    status: user.length >= 1 ? "User exists" : "User does not exists",
+    userExists: user.length >= 1,
+  });
+});
+
+
+
+// Creating, joining, deleting groups
+app.post('/create-group', (req, res) => {
+  const { username, usernames, name } = req.body;
+
+  let id = data.groups.length === 0 ? 1 : parseInt(data.groups[data.groups.length - 1].id) + 1;
+  let members = [];
+  
+  let membersData = data.users.filter((user) => username === user.username || usernames.includes(user.username));
+  for (let i = 0; i < membersData.length; i++) {
+    members.push(membersData[i].id);
+    console.log({ userId: membersData[i].id, groupId: id })
+    data.members.push({ userId: membersData[i].id, groupId: id });
+  }
+
+  const groupInfo = {
+    id: id,
+    members: members,
+    name: name
+  };
+
+  data.groups.push(groupInfo);
+  fs.writeFileSync("./server/db.json", JSON.stringify(data));
+
+  console.log(groupInfo);
+  res.send(groupInfo);
+});
+
+app.post('/join-group', (req, res) => {
+  const { username } = req.body;
+  // const otherUser
+});
+
+
+
+app.get('/test-1', test1);
+
+app.get('/test-2', test2);
+
+function test1(req, res) {
+  const { username1, username2 } = req.body;
+
+  req.url = "/test-2";
+  app._router.handle(req, res);
+  console.log(username2);
+  // res.write(username2);
+  // res.end();
+}
+
+function test2(req, res) {
+  const { username1, username2 } = req.body;
+  console.log(username1);
+  res.write(username1);
+  res.end();
+  // return;
+}
 
 
 

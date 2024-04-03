@@ -15,51 +15,79 @@ export const Register = (props) => {
     const navigate = useNavigate();
 
     const onButtonClick = () => {
-        // setEmailError('');
-        // setPasswordError('');
+        setEmailError('');
+        setUsernameError('');
+        setPasswordError('');
+        setRegisterError('');
+        let usernameErrorCheck = false;
+        let passwordErrorCheck = false;
+        let emailErrorCheck = false;
 
-        // if ('' === email) {
-        //     setEmailError("Please enter your email");
-        // }
+        if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+            setEmailError('Please enter a valid email');
+            emailErrorCheck = true;
+        }
 
-        // else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-        //     setEmailError('Please enter a valid email');
-        // }
+        if ('' === username || /[^a-z0-9]/.test(username)) {
+            setUsernameError('Please enter a valid username');
+            usernameErrorCheck = true;
+        }
     
-        // if ('' === password) {
-        //     setPasswordError('Please enter a password');
-        // }
-        // else if (password.length < 7) {
-        //     setPasswordError('The password must be 8 characters or longer');
-        // }
+        if ('' === password || /\s/.test(password)) {
+            setPasswordError('Please enter a valid password');
+            passwordErrorCheck = true;
+        }
+        else if (password.length < 7) {
+            setPasswordError('The password must be 8 characters or longer');
+            passwordErrorCheck = true;
+        }
 
-        // checkAccountExists((accountExcists) => {
-        //     if (accountExcists) {
-        //         logIn()
-        //     }
-        //     else {
-        //         if (
-        //             window.confirm('An account does not exist with this email address: ' + email + '. Do you want to create a new account?',)
-        //         ) {
-        //             logIn()
-        //         }
-        //     }
-        // });
-    }
+        if (!emailErrorCheck && !usernameErrorCheck && !passwordErrorCheck ) {
+            checkAccountExists((accountExists) => {
+                if (!accountExists) {
+                    register();
+                }
+                else {
+                    setRegisterError('Account with email and/or username already exists. Try again');
+                }
+            });  
+        }
+    };
 
-    // const checkAccountExists = (callback) => {
-    //     fetch('/check-account', {
-    //         method: "POST",
-    //         headers: {
-    //             "Content-type": "application/json"
-    //         },
-    //         body: JSON.stringify({ email })
-    //     })
-    //     .then((r) => r.json())
-    //     .then((r) => {
-    //         callback(r.userExists);
-    //     });
-    // }
+    const checkAccountExists = (callback) => {
+        fetch('/check-repeating-info', {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify({ email, username })
+        })
+        .then((r) => r.json())
+        .then((r) => {
+            callback(r.userExists);
+        });
+    };
+
+    const register = () => {
+        fetch('/create-account', {
+            method: "POST",
+            headers: {
+                'Content-Type': "application/json",
+            },
+            body: JSON.stringify({ email, username, password })
+        })
+        .then((r) => r.json())
+        .then((r) => {
+            if ('success' === r.message) {
+                localStorage.setItem('user', JSON.stringify({ email, token: r.token }));
+                props.setLoggedIn(true);
+                navigate('/');
+            }
+            else {
+                setRegisterError('Error occured. Try again');
+            }
+        })
+    };
 
     // const logIn = () => {
     //     fetch('/auth', {
@@ -109,7 +137,7 @@ export const Register = (props) => {
                     </div>
                     <div className="inputContainer">
                         <input className="inputButton" type="button" onClick={onButtonClick} value={'Register'} />
-                        <label className="errorLabel">{registerError}</label>
+                        <label className="registerErrorLabel">{registerError}</label>
                     </div>
                 </div>
             </div>
