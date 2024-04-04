@@ -1,0 +1,17 @@
+/create-group : 
+    Body : 
+        username [ username of the user creating the chat ] [ string ]
+        usernames [usernames of members of the chat] [ list ]
+        name [ name of the chat ] [ string ]
+        individual [ If true, the group is assumed individual rather than a group chat ] [ boolean ]
+
+    Creates a group based on the information given. By default, the id is immutable and the list of admins is mutable. If individual is false, 
+    the list of members, and the name is mutable, otherwise, these values will not change.
+
+
+
+/read-members : 
+    Body :     
+        id [ id of the chat the user wants to view the information from ] [ number ]
+
+    Returns the members of the group

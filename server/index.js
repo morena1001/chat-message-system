@@ -114,37 +114,95 @@ app.post('/check-repeating-info', (req, res) => {
 
 
 
-// Creating, joining, deleting groups
+
+
+// CRUDing groups
 app.post('/create-group', (req, res) => {
-  const { username, usernames, name } = req.body;
+  const { username, usernames, name, individual } = req.body;
 
   let id = data.groups.length === 0 ? 1 : parseInt(data.groups[data.groups.length - 1].id) + 1;
   let members = [];
+  let admins = [];
+  let groupInfo = {};
   
-  let membersData = data.users.filter((user) => username === user.username || usernames.includes(user.username));
-  for (let i = 0; i < membersData.length; i++) {
-    members.push(membersData[i].id);
-    console.log({ userId: membersData[i].id, groupId: id })
-    data.members.push({ userId: membersData[i].id, groupId: id });
-  }
+  if (individual) {
+    let membersData = data.users.filter((user) => username === user.username || usernames[0] === user.username);
+    for (let i = 0; i < membersData.length; i++) {
+      if (membersData[i].username === username) {
+        admins.push(membersData[i].id);
+      }
+      members.push(membersData[i].id);
+      console.log({ userId: membersData[i].id, groupId: id })
+      data.members.push({ userId: membersData[i].id, groupId: id });
+    }
 
-  const groupInfo = {
-    id: id,
-    members: members,
-    name: name
-  };
+    groupInfo = {
+      id: id,
+      members: members,
+      name: "",
+      admins: admins,
+      individual: individual
+    };
+  }
+  else {
+    let membersData = data.users.filter((user) => username === user.username || usernames.includes(user.username));
+    for (let i = 0; i < membersData.length; i++) {
+      if (membersData[i].username === username) {
+        admins.push(membersData[i].id);
+      }
+      members.push(membersData[i].id);
+      console.log({ userId: membersData[i].id, groupId: id })
+      data.members.push({ userId: membersData[i].id, groupId: id });
+    }
+
+    groupInfo = {
+      id: id,
+      members: members,
+      name: name,
+      admins: admins,
+      individual: individual
+    };
+  }
 
   data.groups.push(groupInfo);
   fs.writeFileSync("./server/db.json", JSON.stringify(data));
 
   console.log(groupInfo);
-  res.send(groupInfo);
+  res.send(groupInfo); 
 });
+
+
+
+app.get('/read-members', (req, res) => {
+  const { id } = req.body;
+  let chat = data.groups.filter((group) => id === group.id)[0];
+  let members = [];
+
+  let membersData = data.users.filter((user) => chat.members.includes(user.id));
+  for (let i = 0; i < membersData.length; i++) {
+    members.push(membersData[i].username);
+  }
+
+  console.log(members);
+  res.send(members);
+});
+
+app.get('/read-name', (req, res) => {
+
+});
+
+app.get('/read-admins', (req, res) => {
+
+});
+
+
 
 app.post('/join-group', (req, res) => {
   const { username } = req.body;
   // const otherUser
 });
+
+
 
 
 
