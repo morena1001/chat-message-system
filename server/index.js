@@ -5,6 +5,7 @@ const express = require("express");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
+const { type } = require('os');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -188,18 +189,137 @@ app.get('/read-members', (req, res) => {
 });
 
 app.get('/read-name', (req, res) => {
+  const { userId, groupId } = req.body;
+  let group = data.groups.filter((group) => groupId === group.id)[0];
 
+  if (group.individual) {
+    let otherUser = group.members.filter((member) => member !== userId);
+    if (otherUser.length !== 1) {
+      console.log("Error occured. Try again");
+      res.send({ message: "Error occured. Try again" });
+    }
+    else {
+      let user = data.users.filter((user) => otherUser[0] === user.id);
+      console.log(user[0].username);
+      res.send(user[0].username);
+    }
+  }
+  else {
+    console.log(group.name);
+    res.send(group.name);
+  }
 });
 
 app.get('/read-admins', (req, res) => {
+  const { id } = req.body;
+  let group = data.groups.filter((group) => id === group.id)[0];
+  let admins = [];
 
+  let adminsData = data.users.filter((user) => group.admins.includes(user.id));
+  for (let i = 0; i < adminsData.length; i++) {
+    admins.push(adminsData[i].username);
+  }
+
+  console.log(admins);
+  res.send(admins);
+});
+
+app.get('/read-id', (req, res) => {
+  const { name } = req.body;
+  let ids = [];
+
+  let idsData = data.groups.filter((group) => group.name === name);
+  if (idsData.length === 0) {
+    console.log("Group named " + name + " does not exist or is an individual chat")
+    res.send({ message: "Group named " + name + " does not exist or is an individual chat" });
+    return;
+  }
+  for (let i = 0; i < idsData.length; i++) {
+    ids.push(idsData[i].id);
+  }
+
+  console.log(ids);
+  res.send(ids);
 });
 
 
 
-app.post('/join-group', (req, res) => {
-  const { username } = req.body;
-  // const otherUser
+app.put('/join-group', (req, res) => {
+  const { userId, groupId } = req.body;
+
+  if (data.groups.filter((group) => groupId === group.id)[0].members.includes(userId)) {
+    console.log("User " + userId + " is already in that group");
+    res.send({ message: "User " + userId + " is already in that group" });
+    return;
+  }
+  if (data.groups.filter((group) => groupId === group.id)[0].individual) {
+    console.log("Chat is individual, and therefore cannot join it");
+    res.send({ message: "Chat is individual, and therefore cannot join it" });
+    return;
+  }
+
+  for (let i = 0; i < data.groups.length; i++) {
+    if (data.groups[i].id === groupId) {
+      data.groups[i].members.push(userId);
+      data.members.push({ userId: userId, groupId: groupId });
+      fs.writeFileSync("./server/db.json", JSON.stringify(data));
+      break;
+    }
+  }
+  
+  console.log(data.groups.filter((group) => groupId === group.id)[0]);
+  console.log(data.members.filter((member) => userId === member.id));
+  res.send({ 
+    group: data.groups.filter((group) => groupId === group.id)[0], 
+    userGroups: data.members.filter((member) => userId === member.id)
+  });
+});
+
+app.put('/leave-group', (req, res) => {
+  const { userId, groupId } = req.body;
+
+  if (!data.groups.filter((group) => groupId === group.id)[0].members.includes(userId)) {
+    console.log("User " + userId + " is not in that group");
+    res.send({ message: "User " + userId + " is not in that group" });
+    return;
+  }
+  if (data.groups.filter((group) => groupId === group.id)[0].individual) {
+    console.log("Chat is individual, and therefore cannot leave it");
+    res.send({ message: "Chat is individual, and therefore cannot leave it" });
+    return;
+  }
+
+  for (let i = 0; i < data.groups.length; i++) {
+    if (data.groups[i].id === groupId) {
+      for (let j = 0; j < data.groups[i].members.length; j++) {
+        if (data.groups[i].members[j] === userId) {
+          data.groups[i].members.splice(j, 1);
+          break;
+        }
+      }
+
+      for (let j = 0; j < data.members.length; j++) {
+        if (data.members[j].groupId === groupId && data.members[j].userId === userId) {
+          data.members.splice(j, 1);
+          break;
+        }
+      }
+
+      fs.writeFileSync("./server/db.json", JSON.stringify(data));
+      console.log(data.groups[i]);
+      console.log(data.members);
+      res.send({ groupMembers: data.groups[i].members, members: data.members });
+      return;
+    }
+  }
+});
+
+app.put('/update-name', (req, res) => {
+  
+});
+
+app.put('/update-admins', (req, res) => {
+  
 });
 
 

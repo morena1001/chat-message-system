@@ -15,3 +15,46 @@
         id [ id of the chat the user wants to view the information from ] [ number ]
 
     Returns the members of the group
+
+
+
+/read-name :
+    Body : 
+        userId [ id of the user who wants to view the information ] [ number ]
+        groupId [ id of the chat the user wants to view the information from ] [ number ]
+
+    Return the name of the group. If the group is an individual chat, it returns the other user of the chat, else it returns the name.
+
+
+
+/read-admins : 
+    Body : 
+        id [ id of the chat the user wants to view the information from ] [ number ]
+
+    Returns the admins of the specified group.
+
+
+
+/read-id :
+    Body : 
+        name [ name of the chat the user wants to view the information from ] [ string ]
+
+    Returns all the possible id of the groups whose name match the name given in the body
+
+
+
+/join-group : 
+    Body : 
+        userId [ id of the user that want to join a chat ] [ number ]
+        groupId [ id of the chat the user wants to join ] [ number ]
+
+    Updates the list of members in the specific group resource, as well as add a new resource to members
+
+
+
+/leave-group : 
+    Body : 
+        userId [ id of the user that wants to leave a chat] [ number ]
+        groupId [ id of the chat the user wants to leave] [ number ]
+
+    Removes the specified member from the group, as well as delete the corresponding resource from the members resource list

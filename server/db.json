@@ -49,13 +49,26 @@
             "members": [
                 1,
                 2,
-                3,
                 4,
                 5
             ],
             "name": "First Admin Group",
             "admins": [
                 1
+            ],
+            "individual": false
+        },
+        {
+            "id": 3,
+            "members": [
+                1,
+                3,
+                4,
+                5
+            ],
+            "name": "Crazy Pizza",
+            "admins": [
+                4
             ],
             "individual": false
         }
@@ -78,16 +91,28 @@
             "groupId": 2
         },
         {
-            "userId": 3,
-            "groupId": 2
-        },
-        {
             "userId": 4,
             "groupId": 2
         },
         {
             "userId": 5,
             "groupId": 2
+        },
+        {
+            "userId": 1,
+            "groupId": 3
+        },
+        {
+            "userId": 3,
+            "groupId": 3
+        },
+        {
+            "userId": 4,
+            "groupId": 3
+        },
+        {
+            "userId": 5,
+            "groupId": 3
         }
     ],
     "messages": []
