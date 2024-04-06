@@ -58,3 +58,23 @@
         groupId [ id of the chat the user wants to leave] [ number ]
 
     Removes the specified member from the group, as well as delete the corresponding resource from the members resource list
+
+
+
+/update-name : 
+    Body : 
+        userId [ id of the user that wants to update the name of a chat ] [ number ] 
+        groupId [ id of the chat that will have its name updated ] [ number ]
+        newName [ the new name for the group chat ] [ string ]
+
+    Updates the name of a group chat if it is not an individual chat and if the user is an admin of the group chat
+
+
+
+/add-admin : 
+    Body : 
+        userId [ id of the user that wants to make another user an admin ] [ number ]
+        otherUserId [ id of the user to be made an admin ] [ number ]
+        groupId [ id of the chat that the otherUser will become an admin of ] [ number ]
+
+    Adds an admin to the speicified group. Only an admin of a group can promote admins

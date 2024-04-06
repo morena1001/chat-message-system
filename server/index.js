@@ -315,11 +315,57 @@ app.put('/leave-group', (req, res) => {
 });
 
 app.put('/update-name', (req, res) => {
-  
+  const { userId, groupId, newName } = req.body;
+
+  if (!data.groups.filter((group) => groupId === group.id)[0].admins.includes(userId)) {
+    console.log("User " + userId + " is not an admin of the group");
+    res.send({ message: "User " + userId + " is not an admin of the group" });
+    return;
+  }
+  if (data.groups.filter((group) => groupId === group.id)[0].individual) {
+    console.log("Chat is individual, and therefore cannot change its name");
+    res.send({ message: "Chat is individual, and therefore cannot change its name" });
+    return;
+  }
+
+  data.groups.filter((group) => groupId === group.id)[0].name = newName;
+  fs.writeFileSync("./server/db.json", JSON.stringify(data));
+
+  console.log(data.groups.filter((group) => groupId === group.id)[0]);
+  res.send({ newName: newName });
 });
 
-app.put('/update-admins', (req, res) => {
-  
+app.put('/add-admin', (req, res) => {
+  const { userId, otherUserId, groupId } = req.body;
+
+  if (data.groups.filter((group) => groupId === group.id)[0].admins.includes(otherUserId)) {
+    console.log("User " + otherUserId + " is already an admin of this group");
+    res.send({ message: "User " + otherUserId + " is already an admin of this group" });
+    return;
+  }
+  if (!data.groups.filter((group) => groupId === group.id)[0].admins.includes(userId)) {
+    console.log("User " + userId + " is not an admin of the chat, and cannot promote members to admin status");
+    res.send({ message: "User " + userId + " is not an admin of the chat, and cannot promote members to admin status" });
+    return;
+  }
+  if (!data.groups.filter((group) => groupId === group.id)[0].members.includes(otherUserId)) {
+    console.log("User " + otherUserId + " is not a member of the chat");
+    res.send({ message: "User " + otherUserId + " is not a member of the chat" });
+    return;
+  }
+
+  data.groups.filter((group) => groupId === group.id)[0].admins.push(otherUserId);
+  fs.writeFileSync("./server/db.json", JSON.stringify(data));
+
+  console.log(data.groups.filter((group) => groupId === group.id)[0].admins);
+  res.send({ admins: data.groups.filter((group) => groupId === group.id)[0].admins });
+});
+
+// app.put('/remove-admin', (req, res) => {
+// });
+
+app.delete('/delete-group', (req, res) => {
+
 });
 
 

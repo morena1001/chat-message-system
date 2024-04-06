@@ -54,7 +54,8 @@
             ],
             "name": "First Admin Group",
             "admins": [
-                1
+                1,
+                5
             ],
             "individual": false
         },
