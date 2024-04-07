@@ -46,35 +46,6 @@ app.post("/auth", (req, res) => {
   }
 });
 
-app.post("/create-account", (req, res) => {
-  const { email, username, password } = req.body;
-  const user = data.users.filter((user) => email === user.email);
-
-  if (user.length === 0) {
-    bcrypt.hash(password, 10, function (err, hash) {
-      let id = data.users.length === 0 ? 1 : parseInt(data.users[data.users.length - 1].id) + 1;
-      const account = {
-        id: id,
-        email: email,
-        username: username,
-        password: hash
-      };
-
-      console.log(account);
-      data.users.push(account);
-      fs.writeFileSync("./server/db.json", JSON.stringify(data));
-
-      let loginData = {
-        email, 
-        signInTime: Date.now()
-      }
-
-      const token = jwt.sign(loginData, jwtSecretKey);
-      res.status(200).json({ message: "success", token })
-    });
-  }
-});
-
 app.post('/verify', (req, res) => {
   const tokenHeaderKey = "jwt-token";
   const authToken = req.headers[tokenHeaderKey];
@@ -117,6 +88,96 @@ app.post('/check-repeating-info', (req, res) => {
 
 
 
+// CRUDing users
+app.post("/create-account", (req, res) => {
+  const { email, username, password } = req.body;
+  const user = data.users.filter((user) => email === user.email || username === user.username);
+
+  if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+    console.log("Email format is incorrect");
+    res.send({ message: "Email format is incorrect" });
+    return;
+  }
+  if ('' === username || /[^a-z0-9]/.test(username)) {
+    console.log("Username format is incorrect");
+    res.send({ message: "Username format is incorrect" });
+    return;
+  }
+  if ('' === password || /\s/.test(password) || password.length < 7) {
+    console.log("password format is incorrect");
+    res.send({ message: "password format is incorrect" });
+    return;
+  }
+
+  if (user.length === 0) {
+    bcrypt.hash(password, 10, function (err, hash) {
+      let id = data.users.length === 0 ? 1 : parseInt(data.users[data.users.length - 1].id) + 1;
+      const account = {
+        id: id,
+        email: email,
+        username: username,
+        password: hash
+      };
+
+      console.log(account);
+      data.users.push(account);
+      fs.writeFileSync("./server/db.json", JSON.stringify(data));
+
+      let loginData = {
+        email, 
+        signInTime: Date.now()
+      }
+
+      const token = jwt.sign(loginData, jwtSecretKey);
+      res.status(200).json({ message: "success", token })
+    });
+    return;
+  }
+
+  console.log("A user with the email " + email + " or the username " + username + " already exists");
+  res.send({ message: "A user with the email " + email + " or the username " + username + " already exists" });
+});
+
+
+
+app.get('/read-email', (req, res) => {
+
+});
+
+
+app.get('/read-user-id', (req, res) => {
+
+});
+
+
+app.get('/read-username', (req, res) => {
+
+});
+
+
+
+app.put('/update-email', (req, res) => {
+
+});
+
+app.put('/update-username', (req, res) => {
+
+});
+
+app.put('/update-password', (req, res) => {
+
+});
+
+
+
+app.delete('/delete-user', (req, res) => {
+
+});
+
+
+
+
+
 // CRUDing groups
 app.post('/create-group', (req, res) => {
   const { username, usernames, name, individual } = req.body;
@@ -129,11 +190,9 @@ app.post('/create-group', (req, res) => {
   if (individual) {
     let membersData = data.users.filter((user) => username === user.username || usernames[0] === user.username);
     for (let i = 0; i < membersData.length; i++) {
-      if (membersData[i].username === username) {
-        admins.push(membersData[i].id);
-      }
+      admins.push(membersData[i].id);
       members.push(membersData[i].id);
-      console.log({ userId: membersData[i].id, groupId: id })
+      console.log({ userId: membersData[i].id, groupId: id });
       data.members.push({ userId: membersData[i].id, groupId: id });
     }
 
@@ -146,13 +205,19 @@ app.post('/create-group', (req, res) => {
     };
   }
   else {
+    if (name === "") {
+      console.log("Name cannot be empty. Try again");
+      res.send({ message: "Name cannot be empty.Try again" });
+      return;
+    }
+
     let membersData = data.users.filter((user) => username === user.username || usernames.includes(user.username));
     for (let i = 0; i < membersData.length; i++) {
       if (membersData[i].username === username) {
         admins.push(membersData[i].id);
       }
       members.push(membersData[i].id);
-      console.log({ userId: membersData[i].id, groupId: id })
+      console.log({ userId: membersData[i].id, groupId: id });
       data.members.push({ userId: membersData[i].id, groupId: id });
     }
 
@@ -224,7 +289,7 @@ app.get('/read-admins', (req, res) => {
   res.send(admins);
 });
 
-app.get('/read-id', (req, res) => {
+app.get('/read-group-id', (req, res) => {
   const { name } = req.body;
   let ids = [];
 
@@ -365,7 +430,25 @@ app.put('/add-admin', (req, res) => {
 // });
 
 app.delete('/delete-group', (req, res) => {
+  const { userId, groupId } = req.body;
 
+  if (!data.groups.filter((group) => groupId === group.id)[0].admins.includes(userId)) {
+    console.log("User " + userId + " is not an admin of the group");
+    res.send({ message: "User " + userId + " is not an admin of the group" });
+    return;
+  }
+
+  for (let i = 0; i < data.groups.length; i++) {
+    if (data.groups[i].id === groupId) {
+      data.groups.splice(i, 1);
+      break;
+    }
+  }
+
+  fs.writeFileSync("./server/db.json", JSON.stringify(data));
+  console.log(data.groups);
+  res.send(data.groups);
+  // ALSO DElETE ALL THE MESSAGES SENT IN THE CHAT
 });
 
 

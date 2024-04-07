@@ -1,4 +1,63 @@
 /create-group : 
+    POST
+    Body : 
+        email [ email of the new account ] [ string ]
+        username [ username of the new account ] [ string ]
+        password [ password of the new account ] [ string ]
+    
+    A new account is created if the email and username given is unique.
+
+
+
+/read-email : 
+    GET
+    Body : 
+        id [ id of the user whose email is to be viewed ] [ number ] { optional if using username }
+        username [ username of the user whose email is to be viewed ] { optional if using id }
+    
+    Returns the email of the user requested
+
+
+
+/read-user-id :
+    GET
+    Body :
+        username [ username of the user whose id is to be viewed ] [ string ] { optional if using email }
+        email [ email of the user whose id is to be viewed ] [ string ] { optional if using username }
+    
+    Returns the id of the user with given username or email
+
+
+
+/read-username :
+    GET
+    Body : 
+        id [ id of the user whose username is to be viewed] [ number ] { optional if using the email }
+        email [ email of the user whose username is to be viewed ] [ string ] { optional if using the id }
+
+    Returns the username of the user requested
+
+
+
+/update-email : 
+    PUT
+    Body : 
+        id [ id of the user ] [ number ] { optional if using either username or email }
+        username [ username of the user ] [ string ] { optional if using either id or email }
+        email [ email of the user ] [ string ] { optional if using either id or username }
+        password [ password of the user who is updating their email ] [ string ]
+        newEmail [ the new email to be used ] [ string ]
+    
+    Updates the email of the user provided that the password given matches the user's password
+
+
+
+/update-username : 
+
+
+
+/create-group : 
+    POST
     Body : 
         username [ username of the user creating the chat ] [ string ]
         usernames [usernames of members of the chat] [ list ]
@@ -11,6 +70,7 @@
 
 
 /read-members : 
+    GET
     Body :     
         id [ id of the chat the user wants to view the information from ] [ number ]
 
@@ -19,6 +79,7 @@
 
 
 /read-name :
+    GET
     Body : 
         userId [ id of the user who wants to view the information ] [ number ]
         groupId [ id of the chat the user wants to view the information from ] [ number ]
@@ -28,6 +89,7 @@
 
 
 /read-admins : 
+    GET
     Body : 
         id [ id of the chat the user wants to view the information from ] [ number ]
 
@@ -35,7 +97,8 @@
 
 
 
-/read-id :
+/read-group-id :
+    GET
     Body : 
         name [ name of the chat the user wants to view the information from ] [ string ]
 
@@ -43,7 +106,8 @@
 
 
 
-/join-group : 
+/join-group :
+    PUT
     Body : 
         userId [ id of the user that want to join a chat ] [ number ]
         groupId [ id of the chat the user wants to join ] [ number ]
@@ -53,6 +117,7 @@
 
 
 /leave-group : 
+    PUT
     Body : 
         userId [ id of the user that wants to leave a chat] [ number ]
         groupId [ id of the chat the user wants to leave] [ number ]
@@ -62,6 +127,7 @@
 
 
 /update-name : 
+    PUT
     Body : 
         userId [ id of the user that wants to update the name of a chat ] [ number ] 
         groupId [ id of the chat that will have its name updated ] [ number ]
@@ -72,9 +138,20 @@
 
 
 /add-admin : 
+    PUT
     Body : 
         userId [ id of the user that wants to make another user an admin ] [ number ]
         otherUserId [ id of the user to be made an admin ] [ number ]
         groupId [ id of the chat that the otherUser will become an admin of ] [ number ]
 
     Adds an admin to the speicified group. Only an admin of a group can promote admins
+
+
+
+/delete-group : 
+    DELETE
+    Body : 
+        userId [ id of the user that wants to delete a group chat ] [ number ]
+        groupId [ id of the chat that will be deleted ] [ number ]
+
+    The chat gets deleted if the user is an admin of the chat, along with the messages.

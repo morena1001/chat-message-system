@@ -29,6 +29,18 @@
             "email": "admin5@adminTest.com",
             "username": "admin5",
             "password": "$2b$10$UsrvddvowLY5b.THfzr/j.nMkNsCq/lNtIHhwk0vFrqkbxnD.bnk2"
+        },
+        {
+            "id": 6,
+            "email": "admin6@adminTest.com",
+            "username": "admin6",
+            "password": "$2b$10$QjIZJIXZgQpdGNjS9zRbIe.Vk7ceP59p5GHPZk.Fs/C8qLqJ4bL4."
+        },
+        {
+            "id": 7,
+            "email": "admin7@adminTest.com",
+            "username": "admin7",
+            "password": "$2b$10$3CAzRl4Xs0rOSloXXQpJweRaHMGNAW0xzkF/H.fR964I/m5kimJhm"
         }
     ],
     "groups": [
@@ -40,7 +52,8 @@
             ],
             "name": "",
             "admins": [
-                1
+                1,
+                2
             ],
             "individual": true
         },
@@ -72,6 +85,19 @@
                 4
             ],
             "individual": false
+        },
+        {
+            "id": 5,
+            "members": [
+                3,
+                5
+            ],
+            "name": "",
+            "admins": [
+                3,
+                5
+            ],
+            "individual": true
         }
     ],
     "members": [
@@ -114,6 +140,22 @@
         {
             "userId": 5,
             "groupId": 3
+        },
+        {
+            "userId": 3,
+            "groupId": 4
+        },
+        {
+            "userId": 5,
+            "groupId": 4
+        },
+        {
+            "userId": 3,
+            "groupId": 5
+        },
+        {
+            "userId": 5,
+            "groupId": 5
         }
     ],
     "messages": []
