@@ -141,37 +141,270 @@ app.post("/create-account", (req, res) => {
 
 
 app.get('/read-email', (req, res) => {
+  let user = data.users.filter((user) => Object.keys(req.body).includes('id') ? 
+    user.id === req.body.id : 
+    user.username === req.body.username)[0];
 
+  if (!user) {
+    console.log("There are no accounts with the given information");
+    res.send({ message: "There are no accounts with the given information" });
+    return;
+  }
+
+  console.log(user.email);
+  res.send({  email: user.email });
 });
 
 
 app.get('/read-user-id', (req, res) => {
+  let user = data.users.filter((user) => Object.keys(req.body).includes('username') ? 
+  user.username === req.body.username : 
+  user.email === req.body.email)[0];
 
+  if (!user) {
+    console.log("There are no accounts with the given information");
+    res.send({ message: "There are no accounts with the given information" });
+    return;
+  }
+
+  console.log(user.id);
+  res.send({  id: user.id });
 });
 
 
 app.get('/read-username', (req, res) => {
+  let user = data.users.filter((user) => Object.keys(req.body).includes('id') ? 
+  user.id === req.body.id : 
+  user.email === req.body.email)[0];
 
+  if (!user) {
+    console.log("There are no accounts with the given information");
+    res.send({ message: "There are no accounts with the given information" });
+    return;
+  }
+
+  console.log(user.username);
+  res.send({  id: user.username });
 });
 
 
 
 app.put('/update-email', (req, res) => {
+  const { password, newEmail } = req.body;
 
+  if (!newEmail) {
+    console.log("New password cannot be empty");
+    res.send({ message: "New password cannot be empty" });
+    return;
+  }
+
+  if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(newEmail)) {
+    console.log("Email format is incorrect");
+    res.send({ message: "Email format is incorrect" });
+    return;
+  }
+
+  const user = Object.keys(req.body).includes('id') ? 
+    data.users.filter((user) => user.id === req.body.id)[0] : 
+    (Object.keys(req.body).includes('username') ? 
+      data.users.filter((user) => user.username === req.body.username)[0] :
+      data.users.filter((user) => user.email === req.body.email)[0]);
+
+  if (!user) {
+    console.log("There is no acount with the given information");
+    res.send({ message: "There is no account with the given information" });
+    return;
+  }
+
+  bcrypt.compare(password, user.password, function (err, result) {
+    if (!result) {
+      console.log("Invalid password");
+      return res.status(401).json({message: "Invalid password"});
+    }
+    else {
+      const users = data.users.filter((user) => user.email === newEmail);
+
+      if (users.length !== 0) {
+        console.log("This email is already under use");
+        res.send({ message: "This email is already under use" });
+        return;
+      }
+      
+      Object.keys(req.body).includes('id') ? 
+        data.users.filter((user) => user.id === req.body.id)[0].email = newEmail : 
+        (Object.keys(req.body).includes('username') ? 
+          data.users.filter((user) => user.username === req.body.username)[0].email = newEmail :
+          data.users.filter((user) => user.email === req.body.email)[0].email = newEmail);
+      fs.writeFileSync("./server/db.json", JSON.stringify(data));
+
+      console.log(data.users);
+      res.status(200).json(data.users);
+    }
+  });
 });
 
 app.put('/update-username', (req, res) => {
+  const { password, newUsername } = req.body;
 
+  if (!newUsername) {
+    console.log("New password cannot be empty");
+    res.send({ message: "New password cannot be empty" });
+    return;
+  }
+
+  if (/[^a-z0-9]/.test(newUsername)) {
+    console.log("Username format is incorrect");
+    res.send({ message: "Username format is incorrect" });
+    return;
+  }
+
+  const user = Object.keys(req.body).includes('id') ? 
+    data.users.filter((user) => user.id === req.body.id)[0] : 
+    (Object.keys(req.body).includes('username') ? 
+      data.users.filter((user) => user.username === req.body.username)[0] :
+      data.users.filter((user) => user.email === req.body.email)[0]);
+
+  if (!user) {
+    console.log("There is no acount with the given information");
+    res.send({ message: "There is no account with the given information" });
+    return;
+  }
+
+  bcrypt.compare(password, user.password, function (err, result) {
+    if (!result) {
+      console.log("Invalid password");
+      return res.status(401).json({message: "Invalid password"});
+    }
+    else {
+      const users = data.users.filter((user) => user.username === newUsername);
+
+      if (users.length !== 0) {
+        console.log("This username is already under use");
+        res.send({ message: "This username is already under use" });
+        return;
+      }
+      
+      Object.keys(req.body).includes('id') ? 
+        data.users.filter((user) => user.id === req.body.id)[0].username = newUsername : 
+        (Object.keys(req.body).includes('username') ? 
+          data.users.filter((user) => user.username === req.body.username)[0].username = newUsername :
+          data.users.filter((user) => user.email === req.body.email)[0].username = newUsername);
+      fs.writeFileSync("./server/db.json", JSON.stringify(data));
+
+      console.log(data.users);
+      res.status(200).json(data.users);
+    }
+  });
 });
 
 app.put('/update-password', (req, res) => {
+  const { password, newPassword } = req.body;
 
+  if (password === newPassword) {
+    console.log("New password cannot be previous password");
+    res.send( { message: "New pasword cannot be previous password" });
+    return;
+  }
+
+  if (!newPassword) {
+    console.log("New password cannot be empty");
+    res.send({ message: "New password cannot be empty" });
+    return;
+  }
+
+  if (/\s/.test(newPassword) || newPassword.length < 7) {
+    console.log("password format is incorrect");
+    res.send({ message: "password format is incorrect" });
+    return;
+  }
+
+  const user = Object.keys(req.body).includes('id') ? 
+    data.users.filter((user) => user.id === req.body.id)[0] : 
+    (Object.keys(req.body).includes('username') ? 
+      data.users.filter((user) => user.username === req.body.username)[0] :
+      data.users.filter((user) => user.email === req.body.email)[0]);
+
+  if (!user) {
+    console.log("There is no acount with the given information");
+    res.send({ message: "There is no account with the given information" });
+    return;
+  }
+
+  bcrypt.compare(password, user.password, function (err, result) {
+    if (!result) {
+      console.log("Invalid password");
+      return res.status(401).json({message: "Invalid password"});
+    }
+    else {      
+      bcrypt.hash(newPassword, 10, function (err, hash) {
+        Object.keys(req.body).includes('id') ? 
+          data.users.filter((user) => user.id === req.body.id)[0].password = hash: 
+          (Object.keys(req.body).includes('username') ? 
+            data.users.filter((user) => user.username === req.body.username)[0].password = hash :
+            data.users.filter((user) => user.email === req.body.email)[0].password = hash);
+        fs.writeFileSync("./server/db.json", JSON.stringify(data));
+
+        console.log(data.users);
+        res.status(200).json(data.users);
+      });
+    }
+  });
 });
 
 
 
 app.delete('/delete-user', (req, res) => {
+  const { password } = req.body;
 
+  const user = Object.keys(req.body).includes('id') ? 
+    data.users.filter((user) => user.id === req.body.id)[0] : 
+    (Object.keys(req.body).includes('username') ? 
+      data.users.filter((user) => user.username === req.body.username)[0] :
+      data.users.filter((user) => user.email === req.body.email)[0]);
+
+  if (!user) {
+    console.log("There is no acount with the given information");
+    res.send({ message: "There is no account with the given information" });
+    return;
+  }
+
+  bcrypt.compare(password, user.password, function (err, result) {
+    if (!result) {
+      console.log("Invalid password");
+      return res.status(401).json({message: "Invalid password"});
+    }
+    else {      
+      data.users = data.users.filter((loopUser) => loopUser.id !== user.id);
+      data.members = data.members.filter((member) => member.userId !== user.id);
+      let newGroups = [];
+      for (let i = 0; i < data.groups.length; i++) {
+        if (data.groups[i].individual && data.groups[i].members.includes(user.id)) {
+          console.log("YAY")
+          continue;
+        }
+        else if (data.groups[i].members.includes(user.id)) {
+          data.groups[i].members = data.groups[i].members.filter((member) => member !== user.id);
+          data.groups[i].admins = data.groups[i].admins.filter((admin) => admin !== user.id);
+
+          if (data.groups[i].members.length === 0) {
+            continue;
+          }
+          if (data.groups[i].admins.length === 0) {
+            data.groups[i].admins.push(data.groups[i].members[0]);
+          }
+        }
+        newGroups.push(data.groups[i]);
+      }
+
+      data.groups = newGroups;
+      fs.writeFileSync("./server/db.json", JSON.stringify(data));
+
+      console.log(data.users);
+      console.log(data.groups);
+      console.log(data.members);
+      res.status(200).json({users: data.users, groups: data.groups, members: data.members });
+    }
+  });
 });
 
 
@@ -244,6 +477,11 @@ app.get('/read-members', (req, res) => {
   let chat = data.groups.filter((group) => id === group.id)[0];
   let members = [];
 
+  if (!chat) {
+    console.log("There are no accounts with the given information");
+    res.send({ message: "There are no accounts with the given information" });
+  }
+
   let membersData = data.users.filter((user) => chat.members.includes(user.id));
   for (let i = 0; i < membersData.length; i++) {
     members.push(membersData[i].username);
@@ -279,6 +517,11 @@ app.get('/read-admins', (req, res) => {
   const { id } = req.body;
   let group = data.groups.filter((group) => id === group.id)[0];
   let admins = [];
+
+  if (!group) {
+    console.log("There are no accounts with the given information");
+    res.send({ message: "There are no accounts with the given information" });
+  }
 
   let adminsData = data.users.filter((user) => group.admins.includes(user.id));
   for (let i = 0; i < adminsData.length; i++) {
@@ -455,27 +698,93 @@ app.delete('/delete-group', (req, res) => {
 
 
 
-app.get('/test-1', test1);
-
-app.get('/test-2', test2);
-
-function test1(req, res) {
-  const { username1, username2 } = req.body;
-
-  req.url = "/test-2";
+// CRUDing members
+app.get('/read-users', (req, res) => {
+  req.url = '/read-members';
   app._router.handle(req, res);
-  console.log(username2);
-  // res.write(username2);
-  // res.end();
-}
+  return;
+});
 
-function test2(req, res) {
-  const { username1, username2 } = req.body;
-  console.log(username1);
-  res.write(username1);
-  res.end();
-  // return;
-}
+app.get('/read-groups', (req, res) => {
+  const { id } = req.body;
+
+  let groups = data.members.filter((member) => member.userId === id);
+  for (let i = 0; i < groups.length; i++) {
+    groups[i] = groups[i].groupId;
+  }
+
+  console.log(groups);
+  res.send({ groups: groups });
+});
+
+
+
+
+
+// CRUDing messages
+app.post('create-message', (req, res) => {
+
+});
+
+
+
+app.get('/read-message-id', (req, res) => {
+
+});
+
+app.get('/read-message-sender', (req, res) => {
+
+});
+
+app.get('/read-message-group-origin', (req, res) => {
+
+});
+
+app.get('/read-message-content', (req, res) => {
+
+});
+
+app.get('/read-message-date-sent', (req, res) => {
+
+});
+
+
+
+app.put('/update-message-content',(req, res) => {
+
+});
+
+
+
+app.delete('/delete-message', (req, res) => {
+
+});
+
+
+
+
+
+// app.get('/test-1', test1);
+
+// app.get('/test-2', test2);
+
+// function test1(req, res) {
+//   const { username1, username2 } = req.body;
+
+//   req.url = "/test-2";
+//   app._router.handle(req, res);
+//   console.log(username2);
+//   // res.write(username2);
+//   // res.end();
+// }
+
+// function test2(req, res) {
+//   const { username1, username2 } = req.body;
+//   console.log(username1);
+//   res.write(username1);
+//   res.end();
+//   // return;
+// }
 
 
 

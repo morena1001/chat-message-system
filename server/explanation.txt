@@ -1,4 +1,4 @@
-/create-group : 
+/create-account : 
     POST
     Body : 
         email [ email of the new account ] [ string ]
@@ -53,6 +53,40 @@
 
 
 /update-username : 
+    PUT
+    Body : 
+        id [ id of the user ] [ number ] { optional if using either username or email}
+        username [ username of the user ] [ string ] { optional if using either id or email }
+        email [ email of the user ] [ string ] { optional if using either id or username }
+        password [ password of the user who is updating their email ] [ string ]
+        newUsername [ the new email to be used ] [ string ]
+
+    Updates the username of the user provided that the password given matches the user's password
+
+
+
+/update-password : 
+    PUT
+    Body : 
+        id [ id of the user ] [ number ] { optional if using either username or email}
+        username [ username of the user ] [ string ] { optional if using either id or email }
+        email [ email of the user ] [ string ] { optional if using either id or username }
+        password [ password of the user who is updating their email ] [ string ]
+        newPassword [ the new email to be used ] [ string ]
+
+    Updates the password of the user provided that the password given matches the user's password
+
+
+
+/delete-user : 
+    DELETE
+    Body : 
+        id [ id of the user ] [ number ] { optional if using either username or email}
+        username [ username of the user ] [ string ] { optional if using either id or email }
+        email [ email of the user ] [ string ] { optional if using either id or username }
+        password [ password of the user who is updating their email ] [ string ]
+
+    Updates the password of the user provided that the password given matches the user's password
 
 
 
@@ -144,7 +178,7 @@
         otherUserId [ id of the user to be made an admin ] [ number ]
         groupId [ id of the chat that the otherUser will become an admin of ] [ number ]
 
-    Adds an admin to the speicified group. Only an admin of a group can promote admins
+    Adds an admin to the specified group. Only an admin of a group can promote admins
 
 
 
@@ -154,4 +188,99 @@
         userId [ id of the user that wants to delete a group chat ] [ number ]
         groupId [ id of the chat that will be deleted ] [ number ]
 
-    The chat gets deleted if the user is an admin of the chat, along with the messages.
+    The chat gets deleted if the user is an admin of the chat, along with the messages
+
+
+
+/read-users : 
+    GET
+    Body : 
+        id [ id of the group that a user wants to see the members of ] [ number ]
+
+    Redirects to /read-members
+
+
+
+/read-groups : 
+    GET
+    Body : 
+        id [ id of a user that another user will see the groups it has joined ] [ number ]
+
+    Returns the groups that the given user has joined
+
+
+
+/create-message : 
+    POST
+    Body : 
+        userId [ id of the user creating the message ] [ number ]
+        groupId [ id of the group where the message was posted ] [ number ]
+        content [ the content of the message ] [ string ]
+    
+    Creates a new message
+
+
+
+/read-message-id : 
+    GET
+    Body : 
+        userId [ id of the user who sent the message ] [ number ] { optional if using groupId }
+        groupId [ id of the group where the message was sent ] [ number ] { optional if using userId }
+        content [ partial or complete part of the message ] [ string ] { optional }
+
+    Returns all the message that fit the information given
+
+
+
+/read-message-sender : 
+    GET 
+    Body : 
+        id [ id of the message ] [ number ]
+
+    Returns the sender of the message specified
+
+
+
+/read-message-group-origin :
+    GET
+    Body : 
+        id [ id of the message ] [ number ]
+
+    Returns the group id where the message was sent
+
+
+
+/read-message-content : 
+    GET
+    Body : 
+        id [ id of the message ] [ number ]
+
+    Returns the group content of the message specified
+
+
+
+/read-message-date-sent : 
+    GET
+    Body : 
+        id [ id of the message ] [ number ]
+
+    Returns the date that the specified message was sent
+
+
+
+/update-message-content : 
+    PUT 
+    Body : 
+        id [ id of the message] [ number ]
+        newContent [ the edited content of the message ]
+
+    Updates the specified message, as well as its date sent
+
+
+
+/delete-message : 
+    DELETE
+    Body : 
+        id [ id of the message] [ number ] 
+
+    Delete the specified message
