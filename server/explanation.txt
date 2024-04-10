@@ -268,6 +268,24 @@
 
 
 
+/read-user-messages :
+    GET
+    Body : 
+        id [ id of the user] [ number ]
+
+    Returns all of the messages sent by the specified user
+
+
+
+/read-chat-messages : 
+    GET
+    Body :
+        id [ id of the chat ] [ number ]
+
+    Returns all of the messages sent in a chat
+
+
+
 /update-message-content : 
     PUT 
     Body : 

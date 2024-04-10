@@ -121,7 +121,7 @@ app.post("/create-account", (req, res) => {
 
       console.log(account);
       data.users.push(account);
-      fs.writeFileSync("./server/db.json", JSON.stringify(data));
+      fs.writeFileSync("./server/db.json", JSON.stringify(data, null, 4));
 
       let loginData = {
         email, 
@@ -235,7 +235,7 @@ app.put('/update-email', (req, res) => {
         (Object.keys(req.body).includes('username') ? 
           data.users.filter((user) => user.username === req.body.username)[0].email = newEmail :
           data.users.filter((user) => user.email === req.body.email)[0].email = newEmail);
-      fs.writeFileSync("./server/db.json", JSON.stringify(data));
+      fs.writeFileSync("./server/db.json", JSON.stringify(data, null, 4));
 
       console.log(data.users);
       res.status(200).json(data.users);
@@ -289,7 +289,7 @@ app.put('/update-username', (req, res) => {
         (Object.keys(req.body).includes('username') ? 
           data.users.filter((user) => user.username === req.body.username)[0].username = newUsername :
           data.users.filter((user) => user.email === req.body.email)[0].username = newUsername);
-      fs.writeFileSync("./server/db.json", JSON.stringify(data));
+      fs.writeFileSync("./server/db.json", JSON.stringify(data, null, 4));
 
       console.log(data.users);
       res.status(200).json(data.users);
@@ -342,7 +342,7 @@ app.put('/update-password', (req, res) => {
           (Object.keys(req.body).includes('username') ? 
             data.users.filter((user) => user.username === req.body.username)[0].password = hash :
             data.users.filter((user) => user.email === req.body.email)[0].password = hash);
-        fs.writeFileSync("./server/db.json", JSON.stringify(data));
+        fs.writeFileSync("./server/db.json", JSON.stringify(data, null, 4));
 
         console.log(data.users);
         res.status(200).json(data.users);
@@ -397,7 +397,7 @@ app.delete('/delete-user', (req, res) => {
       }
 
       data.groups = newGroups;
-      fs.writeFileSync("./server/db.json", JSON.stringify(data));
+      fs.writeFileSync("./server/db.json", JSON.stringify(data, null, 4));
 
       console.log(data.users);
       console.log(data.groups);
@@ -464,7 +464,7 @@ app.post('/create-group', (req, res) => {
   }
 
   data.groups.push(groupInfo);
-  fs.writeFileSync("./server/db.json", JSON.stringify(data));
+  fs.writeFileSync("./server/db.json", JSON.stringify(data, null, 4));
 
   console.log(groupInfo);
   res.send(groupInfo); 
@@ -570,7 +570,7 @@ app.put('/join-group', (req, res) => {
     if (data.groups[i].id === groupId) {
       data.groups[i].members.push(userId);
       data.members.push({ userId: userId, groupId: groupId });
-      fs.writeFileSync("./server/db.json", JSON.stringify(data));
+      fs.writeFileSync("./server/db.json", JSON.stringify(data, null, 4));
       break;
     }
   }
@@ -613,7 +613,7 @@ app.put('/leave-group', (req, res) => {
         }
       }
 
-      fs.writeFileSync("./server/db.json", JSON.stringify(data));
+      fs.writeFileSync("./server/db.json", JSON.stringify(data, null, 4));
       console.log(data.groups[i]);
       console.log(data.members);
       res.send({ groupMembers: data.groups[i].members, members: data.members });
@@ -637,7 +637,7 @@ app.put('/update-name', (req, res) => {
   }
 
   data.groups.filter((group) => groupId === group.id)[0].name = newName;
-  fs.writeFileSync("./server/db.json", JSON.stringify(data));
+  fs.writeFileSync("./server/db.json", JSON.stringify(data, null, 4));
 
   console.log(data.groups.filter((group) => groupId === group.id)[0]);
   res.send({ newName: newName });
@@ -663,7 +663,7 @@ app.put('/add-admin', (req, res) => {
   }
 
   data.groups.filter((group) => groupId === group.id)[0].admins.push(otherUserId);
-  fs.writeFileSync("./server/db.json", JSON.stringify(data));
+  fs.writeFileSync("./server/db.json", JSON.stringify(data, null, 4));
 
   console.log(data.groups.filter((group) => groupId === group.id)[0].admins);
   res.send({ admins: data.groups.filter((group) => groupId === group.id)[0].admins });
@@ -688,7 +688,7 @@ app.delete('/delete-group', (req, res) => {
     }
   }
 
-  fs.writeFileSync("./server/db.json", JSON.stringify(data));
+  fs.writeFileSync("./server/db.json", JSON.stringify(data, null, 4));
   console.log(data.groups);
   res.send(data.groups);
   // ALSO DElETE ALL THE MESSAGES SENT IN THE CHAT
@@ -722,8 +722,45 @@ app.get('/read-groups', (req, res) => {
 
 
 // CRUDing messages
-app.post('create-message', (req, res) => {
+app.post('/create-message', (req, res) => {
+  const { userId, groupId, content } = req.body;
 
+  if (data.users.filter((user) => user.id === userId).length !== 1) {
+    console.log("userId is not valid");
+    res.send({ message: "userId is not valid" });
+    return;
+  }
+  let group = data.groups.filter((group) => group.id === groupId);
+  if (group.length !== 1) {
+    console.log("groupId is not valid");
+    res.send({ message: "groupId is not valid" });
+    return;
+  }
+  if (!group[0].members.includes(userId)) {
+    console.log("user " + userId + " is not part of group " + groupId);
+    res.send({ message: "user " + userId + " is not part of group " + groupId });
+    return; 
+  }
+  if (!content) {
+    console.log("content cannot be empty");
+    res.send({ message: "content cannot be empty"});
+    return;
+  }
+
+  let id = data.messages.length === 0 ? 1 : parseInt(data.messages[data.messages.length - 1].id) + 1;
+  const message = {
+    id: id,
+    userId: userId,
+    groupId: groupId,
+    content: content,
+    date: new Date()
+  }
+
+  data.messages.push(message);
+  fs.writeFileSync("./server/db.json", JSON.stringify(data, null, 4));
+
+  console.log(message);
+  res.send(message);
 });
 
 
@@ -747,6 +784,14 @@ app.get('/read-message-content', (req, res) => {
 app.get('/read-message-date-sent', (req, res) => {
 
 });
+
+// app.get('/read-user-messages', (req, res) => {
+
+// });
+
+// app.get('/read-chat-messages', (req, res) => {
+
+// });
 
 
 

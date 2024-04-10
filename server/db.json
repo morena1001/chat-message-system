@@ -158,5 +158,20 @@
             "groupId": 5
         }
     ],
-    "messages": []
+    "messages": [
+        {
+            "id": 1,
+            "userId": 1,
+            "groupId": 1,
+            "content": "Hello World!",
+            "date": "2024-04-10T01:31:22.017Z"
+        },
+        {
+            "id": 2,
+            "userId": 4,
+            "groupId": 3,
+            "content": "HIIIIII :}",
+            "date": "2024-04-10T01:46:35.961Z"
+        }
+    ]
 }
