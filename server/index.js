@@ -766,43 +766,180 @@ app.post('/create-message', (req, res) => {
 
 
 app.get('/read-message-id', (req, res) => {
+  const { userId, groupId, content } = req.body;
 
+  let messages = data.messages.filter((message) => (userId ? userId === message.userId : true) && 
+    (groupId ? groupId === message.groupId : true) && 
+    (content ? message.content.toLowerCase().includes(content.toLowerCase()) : true));
+
+  if (messages.length === 0) {
+    console.log("No messages found with the given information");
+    res.send( {message: "No messages found with the given information" });
+    return;
+  }
+    
+  console.log(messages);
+  res.send({ messages: messages });
 });
 
 app.get('/read-message-sender', (req, res) => {
+  const { id } = req.body;
 
+  let sender = data.messages.filter((message) => message.id === id);
+
+  if (sender.length === 0) {
+    console.log("No message with id " + id);
+    res.send({ message: "No message with id " + id });
+    return;
+  }
+
+  console.log(sender[0].userId);
+  res.send({ sender: sender[0].userId });
 });
 
 app.get('/read-message-group-origin', (req, res) => {
+  const { id } = req.body;
 
+  let group = data.messages.filter((message) => message.id === id);
+
+  if (group.length === 0) {
+    console.log("No message with id " + id);
+    res.send({ message: "No message with id " + id });
+    return;
+  }
+
+  console.log(group[0].groupId);
+  res.send({ group: group[0].groupId });
 });
 
 app.get('/read-message-content', (req, res) => {
+  const { id } = req.body;
 
+  let content = data.messages.filter((message) => message.id === id);
+
+  if (content.length === 0) {
+    console.log("No message with id " + id);
+    res.send({ message: "No message with id " + id });
+    return;
+  }
+
+  console.log(content[0].content);
+  res.send({ group: content[0].content });
 });
 
 app.get('/read-message-date-sent', (req, res) => {
+  const { id } = req.body;
 
+  let dateSent = data.messages.filter((message) => message.id === id);
+
+  if (dateSent.length === 0) {
+    console.log("No message with id " + id);
+    res.send({ message: "No message with id " + id });
+    return;
+  }
+
+  console.log(dateSent[0].date);
+  res.send({ group: dateSent[0].date });
 });
 
-// app.get('/read-user-messages', (req, res) => {
+app.get('/read-user-messages', (req, res) => {
+  req.body.userId = req.body.id;
+  req.url = '/read-message-id';
+  app._router.handle(req, res);
+  return;
+});
 
-// });
-
-// app.get('/read-chat-messages', (req, res) => {
-
-// });
+app.get('/read-chat-messages', (req, res) => {
+  req.body.groupId = req.body.id;
+  req.url = '/read-message-id';
+  app._router.handle(req, res);
+  return;
+});
 
 
 
 app.put('/update-message-content',(req, res) => {
+  const { messageId, userId, password, newContent } = req.body;
 
+  let message = data.messages.filter((message) => messageId === message.id);
+
+  if (message.length !== 1) {
+    console.log("There is no message with id " + messageId);
+    res.send({ message: "There is no message with id " + messageId });
+    return;
+  }
+  if (message[0].userId !== userId) {
+    console.log("The user " + userId + " did not create this message");
+    res.send({ message: "The user " + userId + " did not create this message" });
+    return;
+  }
+
+  let user = data.users.filter((user) => userId === user.id);
+  if (user.length !== 1) {
+    console.log("This is no account with id " + userId);
+    res.send({ message: "There is no account with id " + userId });
+    return;
+  }
+  if (!newContent) {
+    console.log("Edited message cannot be empty");
+    res.send({ message: "Edited message cannot be empty" });
+    return;
+  }
+  
+  bcrypt.compare(password, user[0].password, function(err, result) {
+    if (!result) {
+      console.log("Invalid password");
+      return res.status(401).json({message: "Invalid password"});
+    }
+    else {
+      data.messages.filter((message) => messageId === message.id)[0].content = newContent;
+      data.messages.filter((message) => messageId === message.id)[0].date = new Date();
+
+      fs.writeFileSync("./server/db.json", JSON.stringify(data, null, 4));
+
+      console.log(data.messages.filter((message) => messageId === messageId));
+      res.send({ message: data.messages.filter((message) => messageId === messageId) });
+    }
+  });
 });
 
 
 
 app.delete('/delete-message', (req, res) => {
+  const { messageId, userId, password } = req.body;
+  let messageIndex = data.messages.findIndex((message) => message.id === messageId);
 
+  if (messageIndex === -1) {
+    console.log("There is no message with id " + messageId);
+    res.send({ message: "There is no message with id " + messageId });
+    return;
+  }
+  if (data.messages[messageIndex].userId !== userId) {
+    console.log("The user " + userId + " did not create this message");
+    res.send({ message: "The user " + userId + " did not create this message" });
+    return;
+  }
+
+  let user = data.users.findIndex((user) => userId === user.id);
+  if (user === -1) {
+    console.log("This is no account with id " + userId);
+    res.send({ message: "There is no account with id " + userId });
+    return;
+  }
+
+  bcrypt.compare(password, data.users[user].password, function(err, result) {
+    if (!result) {
+      console.log("Invalid password");
+      return res.status(401).json({message: "Invalid password"});
+    }
+    else {
+      data.messages.splice(messageIndex, 1);
+      fs.writeFileSync("./server/db.json", JSON.stringify(data, null, 4));
+
+      console.log(data.messages);
+      res.send({ messages: data.messages });
+    }
+  });
 });
 
 

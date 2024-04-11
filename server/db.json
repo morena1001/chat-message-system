@@ -172,6 +172,20 @@
             "groupId": 3,
             "content": "HIIIIII :}",
             "date": "2024-04-10T01:46:35.961Z"
+        },
+        {
+            "id": 3,
+            "userId": 4,
+            "groupId": 3,
+            "content": "Hello World!",
+            "date": "2024-04-11T00:31:12.671Z"
+        },
+        {
+            "id": 4,
+            "userId": 1,
+            "groupId": 2,
+            "content": "LESSSSS GOOOOO",
+            "date": "2024-04-11T01:16:04.255Z"
         }
     ]
 }

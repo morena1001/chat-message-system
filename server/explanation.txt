@@ -289,8 +289,10 @@
 /update-message-content : 
     PUT 
     Body : 
-        id [ id of the message] [ number ]
-        newContent [ the edited content of the message ]
+        messageId [ id of the message] [ number ]
+        userId [ id of the user that created the message ] [ number ]
+        password [ password of the user that created the message ] [ string ]
+        newContent [ the edited content of the message ] [ string ]
 
     Updates the specified message, as well as its date sent
 
@@ -299,6 +301,8 @@
 /delete-message : 
     DELETE
     Body : 
-        id [ id of the message] [ number ] 
+        messageId [ id of the message] [ number ] 
+        userId [ id of the user that created the message ] [ number ]
+        password [ password of the user that created the message ] [ string ]
 
     Delete the specified message
