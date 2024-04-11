@@ -861,21 +861,23 @@ app.get('/read-chat-messages', (req, res) => {
 app.put('/update-message-content',(req, res) => {
   const { messageId, userId, password, newContent } = req.body;
 
-  let message = data.messages.filter((message) => messageId === message.id);
+  // let message = data.messages.filter((message) => messageId === message.id);
+  let messageIndex = data.messages.findIndex((message) => messageId === message.id);
 
-  if (message.length !== 1) {
+  if (messageIndex === -1) {
     console.log("There is no message with id " + messageId);
     res.send({ message: "There is no message with id " + messageId });
     return;
   }
-  if (message[0].userId !== userId) {
+  if (data.messages[messageIndex].userId !== userId) {
     console.log("The user " + userId + " did not create this message");
     res.send({ message: "The user " + userId + " did not create this message" });
     return;
   }
 
-  let user = data.users.filter((user) => userId === user.id);
-  if (user.length !== 1) {
+  // let user = data.users.filter((user) => userId === user.id);
+  let userIndex = data.users.findIndex((user) => userId === user.id);
+  if (userIndex === -1) {
     console.log("This is no account with id " + userId);
     res.send({ message: "There is no account with id " + userId });
     return;
@@ -886,19 +888,22 @@ app.put('/update-message-content',(req, res) => {
     return;
   }
   
-  bcrypt.compare(password, user[0].password, function(err, result) {
+  bcrypt.compare(password, data.users[userIndex].password, function(err, result) {
     if (!result) {
       console.log("Invalid password");
       return res.status(401).json({message: "Invalid password"});
     }
     else {
-      data.messages.filter((message) => messageId === message.id)[0].content = newContent;
-      data.messages.filter((message) => messageId === message.id)[0].date = new Date();
+      // data.messages.filter((message) => messageId === message.id)[0].content = newContent;
+      // data.messages.filter((message) => messageId === message.id)[0].date = new Date();
+
+      data.messages[messageIndex].content = newContent;
+      data.messages[messageIndex].date = new Date();
 
       fs.writeFileSync("./server/db.json", JSON.stringify(data, null, 4));
 
-      console.log(data.messages.filter((message) => messageId === messageId));
-      res.send({ message: data.messages.filter((message) => messageId === messageId) });
+      console.log(data.messages[messageIndex]);
+      res.send({ message: data.messages[messageIndex] });
     }
   });
 });
@@ -920,14 +925,14 @@ app.delete('/delete-message', (req, res) => {
     return;
   }
 
-  let user = data.users.findIndex((user) => userId === user.id);
-  if (user === -1) {
+  let userIndex = data.users.findIndex((user) => userId === user.id);
+  if (userIndex === -1) {
     console.log("This is no account with id " + userId);
     res.send({ message: "There is no account with id " + userId });
     return;
   }
 
-  bcrypt.compare(password, data.users[user].password, function(err, result) {
+  bcrypt.compare(password, data.users[userIndex].password, function(err, result) {
     if (!result) {
       console.log("Invalid password");
       return res.status(401).json({message: "Invalid password"});
