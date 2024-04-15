@@ -82,7 +82,8 @@
             ],
             "name": "Crazy Pizza",
             "admins": [
-                4
+                4,
+                5
             ],
             "individual": false
         },

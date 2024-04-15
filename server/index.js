@@ -379,7 +379,6 @@ app.delete('/delete-user', (req, res) => {
       let newGroups = [];
       for (let i = 0; i < data.groups.length; i++) {
         if (data.groups[i].individual && data.groups[i].members.includes(user.id)) {
-          console.log("YAY")
           continue;
         }
         else if (data.groups[i].members.includes(user.id)) {
@@ -555,6 +554,8 @@ app.get('/read-group-id', (req, res) => {
 app.put('/join-group', (req, res) => {
   const { userId, groupId } = req.body;
 
+  // let groupIndex = data.groups.findIndex((group) => groupId === group.id)
+
   if (data.groups.filter((group) => groupId === group.id)[0].members.includes(userId)) {
     console.log("User " + userId + " is already in that group");
     res.send({ message: "User " + userId + " is already in that group" });
@@ -646,27 +647,29 @@ app.put('/update-name', (req, res) => {
 app.put('/add-admin', (req, res) => {
   const { userId, otherUserId, groupId } = req.body;
 
-  if (data.groups.filter((group) => groupId === group.id)[0].admins.includes(otherUserId)) {
+  let groupIndex = data.groups.findIndex((group) => groupId === group.id);
+
+  if (data.groups[groupIndex].admins.includes(otherUserId)) {
     console.log("User " + otherUserId + " is already an admin of this group");
     res.send({ message: "User " + otherUserId + " is already an admin of this group" });
     return;
   }
-  if (!data.groups.filter((group) => groupId === group.id)[0].admins.includes(userId)) {
+  if (!data.groups[groupIndex].admins.includes(userId)) {
     console.log("User " + userId + " is not an admin of the chat, and cannot promote members to admin status");
     res.send({ message: "User " + userId + " is not an admin of the chat, and cannot promote members to admin status" });
     return;
   }
-  if (!data.groups.filter((group) => groupId === group.id)[0].members.includes(otherUserId)) {
+  if (!data.groups[groupIndex].members.includes(otherUserId)) {
     console.log("User " + otherUserId + " is not a member of the chat");
     res.send({ message: "User " + otherUserId + " is not a member of the chat" });
     return;
   }
 
-  data.groups.filter((group) => groupId === group.id)[0].admins.push(otherUserId);
+  data.groups[groupIndex].admins.push(otherUserId);
   fs.writeFileSync("./server/db.json", JSON.stringify(data, null, 4));
 
-  console.log(data.groups.filter((group) => groupId === group.id)[0].admins);
-  res.send({ admins: data.groups.filter((group) => groupId === group.id)[0].admins });
+  console.log(data.groups[groupIndex].admins);
+  res.send({ admins: data.groups[groupIndex].admins });
 });
 
 // app.put('/remove-admin', (req, res) => {

@@ -132,9 +132,48 @@ body {
     margin-right: 895px;
 }
 
+.searchAndFilterContainer {
+    border-bottom: 1px solid black;
+    font-size: 18px;
+    /* margin-right: 0px; */
+    height: 35px;
+}
+
 .searchAndFilterWrapper {
     display: flex;
+    /* position: absolute; */
+    position: relative;
+}
+
+.searchBar {
     position: absolute;
+    top: 5px;
+    left: 5px;
+    border: 1px solid black;
+    background-color: white;
+    border-radius: 20px;
+    font-family: inherit;
+    padding: 4px 6px;
+    font-size: 12px;
+    width: 200px;
+}
+
+.filterButton {
+    position: absolute;
+    top: 5px;
+    left: 236px;
+    border: 1px solid black;
+    background-color: white;
+    border-radius: 20px;
+    font-family: inherit;
+    padding: 4px 6px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.filterButton:hover {
+    background-color: rgb(185, 141, 69);
+    color: white;
 }
 
 
