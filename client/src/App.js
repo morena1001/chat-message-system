@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Home } from './components/home/home';
 import { Login } from './components/login/login';
 import { Register } from './components/Register/register';
+import { Profile } from './components/profile/profile';
 import './App.css';
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
           <Route path='/' element={ <Home username={username} loggedIn={loggedIn} setLoggedIn={setLoggedIn} /> } />
           <Route path='/login' element={ <Login username={username} loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUsername={username} /> } />
           <Route path='/register' element={ <Register username={username} loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUsername={username} /> } />
+          <Route path='/profile/:id' element={ <Profile /> } />
           {/* <Route path='/shows/:id' Component={Resource} />
           <Route path='/new' Component={CreateResource} /> */}
         </Routes>

@@ -154,6 +154,20 @@ app.get('/read-email', (req, res) => {
   console.log(user.email);
   res.send({  email: user.email });
 });
+app.post('/read-email', (req, res) => {
+  let user = data.users.filter((user) => Object.keys(req.body).includes('id') ? 
+    user.id === req.body.id : 
+    user.username === req.body.username)[0];
+
+  if (!user) {
+    console.log("There are no accounts with the given information");
+    res.send({ message: "There are no accounts with the given information" });
+    return;
+  }
+
+  console.log(user.email);
+  res.send({  email: user.email });
+});
 
 
 app.get('/read-user-id', (req, res) => {
@@ -170,9 +184,24 @@ app.get('/read-user-id', (req, res) => {
   console.log(user.id);
   res.send({  id: user.id });
 });
+app.post('/read-user-id', (req, res) => {
+  let user = data.users.filter((user) => Object.keys(req.body).includes('username') ? 
+  user.username === req.body.username : 
+  user.email === req.body.email)[0];
+
+  if (!user) {
+    console.log("There are no accounts with the given information");
+    res.send({ message: "There are no accounts with the given information" });
+    return;
+  }
+
+  console.log(user.id);
+  res.send({  id: user.id });
+});
 
 
 app.get('/read-username', (req, res) => {
+  console.log(req.body);
   let user = data.users.filter((user) => Object.keys(req.body).includes('id') ? 
   user.id === req.body.id : 
   user.email === req.body.email)[0];
@@ -184,7 +213,22 @@ app.get('/read-username', (req, res) => {
   }
 
   console.log(user.username);
-  res.send({  id: user.username });
+  res.send({  username: user.username });
+});
+app.post('/read-username', (req, res) => {
+  console.log(req.body);
+  let user = data.users.filter((user) => Object.keys(req.body).includes('id') ? 
+  user.id === req.body.id : 
+  user.email === req.body.email)[0];
+
+  if (!user) {
+    console.log("There are no accounts with the given information");
+    res.send({ message: "There are no accounts with the given information" });
+    return;
+  }
+
+  console.log(user.username);
+  res.send({  username: user.username });
 });
 
 
@@ -489,8 +533,47 @@ app.get('/read-members', (req, res) => {
   console.log(members);
   res.send(members);
 });
+app.post('/read-members', (req, res) => {
+  const { id } = req.body;
+  let chat = data.groups.filter((group) => id === group.id)[0];
+  let members = [];
+
+  if (!chat) {
+    console.log("There are no accounts with the given information");
+    res.send({ message: "There are no accounts with the given information" });
+  }
+
+  let membersData = data.users.filter((user) => chat.members.includes(user.id));
+  for (let i = 0; i < membersData.length; i++) {
+    members.push(membersData[i].username);
+  }
+
+  console.log(members);
+  res.send(members);
+});
 
 app.get('/read-name', (req, res) => {
+  const { userId, groupId } = req.body;
+  let group = data.groups.filter((group) => groupId === group.id)[0];
+
+  if (group.individual) {
+    let otherUser = group.members.filter((member) => member !== userId);
+    if (otherUser.length !== 1) {
+      console.log("Error occured. Try again");
+      res.send({ message: "Error occured. Try again" });
+    }
+    else {
+      let user = data.users.filter((user) => otherUser[0] === user.id);
+      console.log(user[0].username);
+      res.send(user[0].username);
+    }
+  }
+  else {
+    console.log(group.name);
+    res.send(group.name);
+  }
+});
+app.post('/read-name', (req, res) => {
   const { userId, groupId } = req.body;
   let group = data.groups.filter((group) => groupId === group.id)[0];
 
@@ -530,6 +613,24 @@ app.get('/read-admins', (req, res) => {
   console.log(admins);
   res.send(admins);
 });
+app.post('/read-admins', (req, res) => {
+  const { id } = req.body;
+  let group = data.groups.filter((group) => id === group.id)[0];
+  let admins = [];
+
+  if (!group) {
+    console.log("There are no accounts with the given information");
+    res.send({ message: "There are no accounts with the given information" });
+  }
+
+  let adminsData = data.users.filter((user) => group.admins.includes(user.id));
+  for (let i = 0; i < adminsData.length; i++) {
+    admins.push(adminsData[i].username);
+  }
+
+  console.log(admins);
+  res.send(admins);
+});
 
 app.get('/read-group-id', (req, res) => {
   const { name } = req.body;
@@ -548,7 +649,23 @@ app.get('/read-group-id', (req, res) => {
   console.log(ids);
   res.send(ids);
 });
+app.post('/read-group-id', (req, res) => {
+  const { name } = req.body;
+  let ids = [];
 
+  let idsData = data.groups.filter((group) => group.name === name);
+  if (idsData.length === 0) {
+    console.log("Group named " + name + " does not exist or is an individual chat")
+    res.send({ message: "Group named " + name + " does not exist or is an individual chat" });
+    return;
+  }
+  for (let i = 0; i < idsData.length; i++) {
+    ids.push(idsData[i].id);
+  }
+
+  console.log(ids);
+  res.send(ids);
+});
 
 
 app.put('/join-group', (req, res) => {
@@ -707,8 +824,24 @@ app.get('/read-users', (req, res) => {
   app._router.handle(req, res);
   return;
 });
+app.post('/read-users', (req, res) => {
+  req.url = '/read-members';
+  app._router.handle(req, res);
+  return;
+});
 
 app.get('/read-groups', (req, res) => {
+  const { id } = req.body;
+
+  let groups = data.members.filter((member) => member.userId === id);
+  for (let i = 0; i < groups.length; i++) {
+    groups[i] = groups[i].groupId;
+  }
+
+  console.log(groups);
+  res.send({ groups: groups });
+});
+app.post('/read-groups', (req, res) => {
   const { id } = req.body;
 
   let groups = data.members.filter((member) => member.userId === id);
@@ -784,8 +917,38 @@ app.get('/read-message-id', (req, res) => {
   console.log(messages);
   res.send({ messages: messages });
 });
+app.post('/read-message-id', (req, res) => {
+  const { userId, groupId, content } = req.body;
+
+  let messages = data.messages.filter((message) => (userId ? userId === message.userId : true) && 
+    (groupId ? groupId === message.groupId : true) && 
+    (content ? message.content.toLowerCase().includes(content.toLowerCase()) : true));
+
+  if (messages.length === 0) {
+    console.log("No messages found with the given information");
+    res.send( {message: "No messages found with the given information" });
+    return;
+  }
+    
+  console.log(messages);
+  res.send({ messages: messages });
+});
 
 app.get('/read-message-sender', (req, res) => {
+  const { id } = req.body;
+
+  let sender = data.messages.filter((message) => message.id === id);
+
+  if (sender.length === 0) {
+    console.log("No message with id " + id);
+    res.send({ message: "No message with id " + id });
+    return;
+  }
+
+  console.log(sender[0].userId);
+  res.send({ sender: sender[0].userId });
+});
+app.post('/read-message-sender', (req, res) => {
   const { id } = req.body;
 
   let sender = data.messages.filter((message) => message.id === id);
@@ -814,8 +977,36 @@ app.get('/read-message-group-origin', (req, res) => {
   console.log(group[0].groupId);
   res.send({ group: group[0].groupId });
 });
+app.post('/read-message-group-origin', (req, res) => {
+  const { id } = req.body;
+
+  let group = data.messages.filter((message) => message.id === id);
+
+  if (group.length === 0) {
+    console.log("No message with id " + id);
+    res.send({ message: "No message with id " + id });
+    return;
+  }
+
+  console.log(group[0].groupId);
+  res.send({ group: group[0].groupId });
+});
 
 app.get('/read-message-content', (req, res) => {
+  const { id } = req.body;
+
+  let content = data.messages.filter((message) => message.id === id);
+
+  if (content.length === 0) {
+    console.log("No message with id " + id);
+    res.send({ message: "No message with id " + id });
+    return;
+  }
+
+  console.log(content[0].content);
+  res.send({ group: content[0].content });
+});
+app.post('/read-message-content', (req, res) => {
   const { id } = req.body;
 
   let content = data.messages.filter((message) => message.id === id);
@@ -844,6 +1035,20 @@ app.get('/read-message-date-sent', (req, res) => {
   console.log(dateSent[0].date);
   res.send({ group: dateSent[0].date });
 });
+app.post('/read-message-date-sent', (req, res) => {
+  const { id } = req.body;
+
+  let dateSent = data.messages.filter((message) => message.id === id);
+
+  if (dateSent.length === 0) {
+    console.log("No message with id " + id);
+    res.send({ message: "No message with id " + id });
+    return;
+  }
+
+  console.log(dateSent[0].date);
+  res.send({ group: dateSent[0].date });
+});
 
 app.get('/read-user-messages', (req, res) => {
   req.body.userId = req.body.id;
@@ -851,8 +1056,20 @@ app.get('/read-user-messages', (req, res) => {
   app._router.handle(req, res);
   return;
 });
+app.post('/read-user-messages', (req, res) => {
+  req.body.userId = req.body.id;
+  req.url = '/read-message-id';
+  app._router.handle(req, res);
+  return;
+});
 
 app.get('/read-chat-messages', (req, res) => {
+  req.body.groupId = req.body.id;
+  req.url = '/read-message-id';
+  app._router.handle(req, res);
+  return;
+});
+app.post('/read-chat-messages', (req, res) => {
   req.body.groupId = req.body.id;
   req.url = '/read-message-id';
   app._router.handle(req, res);
