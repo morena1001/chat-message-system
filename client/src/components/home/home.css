@@ -6,19 +6,21 @@
 body {
     font-family: Montserrat;
     background-color: rgb(228, 217, 195);
+    overflow-y: hidden;
 }
 
 .clientContainer {
     display: flex;
     /* flex-direction: column; */
     /* flex-direction: row; */
+    /* height: 100vh; */
 }
 
 .leftSideContainer {
     /* margin-left: -10px; */
     border: 1px solid black;
     /* height: 100%;     */
-    height: 200px;
+    height: 98vh;
     width: 600px;
 }
 
@@ -27,6 +29,7 @@ body {
     border: 1px solid black;
     border-left: none;
     width: 100%;
+    height: 98vh;
 }
 
 .headerContainer {
