@@ -586,7 +586,7 @@ app.post('/read-name', (req, res) => {
     else {
       let user = data.users.filter((user) => otherUser[0] === user.id);
       console.log(user[0].username);
-      res.send(user[0].username);
+      res.send({ user: user[0].username});
     }
   }
   else {
@@ -666,6 +666,34 @@ app.post('/read-group-id', (req, res) => {
   console.log(ids);
   res.send(ids);
 });
+
+app.get('/read-group-info', (req, res) => {
+  const { id } = req.body;
+
+  let group = data.groups.filter((group) => group.id === id);
+  if (!group.length === 0) {
+    console.log("There is no group with id " + id);
+    res.send({ message: "There is no group with id " + id });
+    return;
+  }
+
+  console.log(group[0]);
+  res.send(group[0]);
+});
+app.post('/read-group-info', (req, res) => {
+  const { id } = req.body;
+
+  let group = data.groups.filter((group) => group.id === id);
+  if (group.length === 0) {
+    console.log("There is no group with id " + id);
+    res.send({ message: "There is no group with id " + id });
+    return;
+  }
+
+  console.log(group[0]);
+  res.send(group[0]);
+});
+
 
 
 app.put('/join-group', (req, res) => {
@@ -1074,6 +1102,47 @@ app.post('/read-chat-messages', (req, res) => {
   req.url = '/read-message-id';
   app._router.handle(req, res);
   return;
+});
+
+app.get('/read-latest-message', (req, res) => {
+  const { id } = req.body;
+
+  let messages = data.messages.filter((message) => message.groupId === id);
+
+  if (messages.length === 0) {
+    console.log("The group with id " + id + " has no messages");
+    res.send({ message: "The group with id " + id + " has no messages" });
+    return;
+  }
+  var latestMessage = messages[0];
+
+  for (let i = 1; i < messages.length; i++) {
+    if (Date.parse(latestMessage.date) < Date.parse(messages[i].date)) {
+      latestMessage = messages[i];
+    }
+  }
+  console.log(latestMessage);
+  res.send({ message: latestMessage });
+});
+app.post('/read-latest-message', (req, res) => {
+  const { id } = req.body;
+
+  let messages = data.messages.filter((message) => message.groupId === id);
+
+  if (messages.length === 0) {
+    console.log("The group with id " + id + " has no messages");
+    res.send({ message: "The group with id " + id + " has no messages" });
+    return;
+  }
+  var latestMessage = messages[0];
+
+  for (let i = 1; i < messages.length; i++) {
+    if (Date.parse(latestMessage.date) < Date.parse(messages[i].date)) {
+      latestMessage = messages[i];
+    }
+  }
+  console.log(latestMessage);
+  res.send({ message: latestMessage });
 });
 
 

@@ -187,6 +187,13 @@
             "groupId": 2,
             "content": "LESSSSS GOOOOO",
             "date": "2024-04-11T01:16:04.255Z"
+        },
+        {
+            "id": 5,
+            "userId": 1,
+            "groupId": 1,
+            "content": "I LOVE SLEEP",
+            "date": "2024-04-23T01:22:18.076Z"
         }
     ]
 }

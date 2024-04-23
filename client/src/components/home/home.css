@@ -11,21 +11,17 @@ body {
 
 .clientContainer {
     display: flex;
-    /* flex-direction: column; */
-    /* flex-direction: row; */
-    /* height: 100vh; */
 }
 
 .leftSideContainer {
-    /* margin-left: -10px; */
     border: 1px solid black;
-    /* height: 100%;     */
+    display: flex;
+    flex-direction: column;
     height: 98vh;
     width: 600px;
 }
 
 .rightSideContainer {
-    /* margin-left: -1px; */
     border: 1px solid black;
     border-left: none;
     width: 100%;
@@ -35,27 +31,29 @@ body {
 .headerContainer {
     border-bottom: 1px solid black;
     font-size: 25px;
-    /* margin-right: 0px; */
     height: 34px;
 }
 
 .headerWrapper {
     display: flex;
-    position: absolute;
+    justify-content: space-between;
 }
 
 .usernameTitle {
     margin-left: 10px;
-    margin-right: 255px;
 }
 
 .newChat {
     margin-top: -7px;
 }
 
+.headerButtons { 
+    display: flex;
+    column-gap: 8px;
+    margin-right: 10px;
+}
+
 .newChatButton {
-    position: absolute;
-    margin-top: 12px;
     background-color: white;
     border: 1px solid black;
     border-radius: 50%;
@@ -63,7 +61,6 @@ body {
     cursor: pointer;
     width: 24px;
     height: 24px;
-    margin-right: 10px;
 }
 
 .newChatButton:hover {
@@ -73,7 +70,7 @@ body {
 
 .icon {
     position: absolute;
-    margin-left: -7px;
+    margin-left: -6.5px;
     margin-top: -8px;
 }
 
@@ -82,8 +79,6 @@ body {
 }
 
 .optionsButton {
-    position: absolute;
-    margin-top: 12px;
     background-color: white;
     border: 1px solid black;
     border-radius: 50%;
@@ -91,8 +86,6 @@ body {
     cursor: pointer;
     width: 24px;
     height: 24px;
-    margin-right: 10px;
-    margin-left: 34px;
 }
 
 .optionsButton:hover {
@@ -102,13 +95,16 @@ body {
 
 .optionsIcon {
     position: absolute;
-    margin-left: -2px;
+    margin-left: -1.5px;
     margin-top: -8px;
 }
 
+.chatOptions { 
+    margin-top: -7px;
+    margin-right: 10px;
+}
+
 .chatOptionsButton {
-    margin-top: 5px;
-    position: absolute;
     background-color: white;
     border: 1px solid black;
     border-radius: 50%;
@@ -116,7 +112,6 @@ body {
     cursor: pointer;
     width: 24px;
     height: 24px;
-    margin-right: 10px; 
 }
 
 .chatOptionsButton:hover {
@@ -132,26 +127,19 @@ body {
 
 .chatTitle {
     margin-left: 10px;
-    margin-right: 895px;
 }
 
 .searchAndFilterContainer {
     border-bottom: 1px solid black;
     font-size: 18px;
-    /* margin-right: 0px; */
     height: 35px;
 }
 
 .searchAndFilterWrapper {
     display: flex;
-    /* position: absolute; */
-    position: relative;
 }
 
 .searchBar {
-    position: absolute;
-    top: 5px;
-    left: 5px;
     border: 1px solid black;
     background-color: white;
     border-radius: 20px;
@@ -159,12 +147,14 @@ body {
     padding: 4px 6px;
     font-size: 12px;
     width: 200px;
+    margin: 5px 8px 0px 10px;
+}
+
+.filter { 
+    margin-top: 5px;
 }
 
 .filterButton {
-    position: absolute;
-    top: 5px;
-    left: 236px;
     border: 1px solid black;
     background-color: white;
     border-radius: 20px;
@@ -179,4 +169,47 @@ body {
     color: white;
 }
 
+.groupChatButtonContainer {
+    overflow-y: auto;
+    flex-grow: 2;
+    display: flex;
+    flex-direction: column;
+    scrollbar-width: none;
+}
 
+.group {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid black;
+    padding: 0px 10px;
+    cursor: pointer;
+}
+
+.group:hover {
+    background-color: rgb(185, 141, 69);
+    color: white;
+}
+
+.groupChatButtonContainerTitle {
+    margin: 6px 0px;
+}
+
+.mostRecentMessage {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    font-size: 12px;
+}
+
+.endOfChatsList {
+    margin: 6px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.meow {
+    font-size: 12px;
+    margin-left: 4px;
+    margin-top: 6px;
+}

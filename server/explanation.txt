@@ -140,6 +140,15 @@
 
 
 
+/read-group-info : 
+    GET
+    Body : 
+        id [ id of the group chat ] [ number ]
+
+    Returns all of the information regarding the group with the id
+
+
+
 /join-group :
     PUT
     Body : 
@@ -228,7 +237,7 @@
         groupId [ id of the group where the message was sent ] [ number ] { optional if using userId }
         content [ partial or complete part of the message ] [ string ] { optional }
 
-    Returns all the message that fit the information given
+    Returns all the messages that fit the information given
 
 
 
@@ -283,6 +292,15 @@
         id [ id of the chat ] [ number ]
 
     Returns all of the messages sent in a chat
+
+
+
+/read-latest-message : 
+    GET
+    Body : 
+        id [ id of the group where the message was sent ] [ number ]
+
+    Returns the most recent message sent in a group chat
 
 
 
