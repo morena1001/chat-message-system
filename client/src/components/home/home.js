@@ -151,12 +151,10 @@ function setup(username, loadChatMessages) {
                         .then((res4) => {
                             res3.name = res4.user;
                             createChatListItem(res3, loadChatMessages);
-                            console.log(res3);
                         });
                     }
                     else {
                         createChatListItem(res3, loadChatMessages);
-                        console.log(res3);
                     }
                 });
             });
@@ -174,11 +172,55 @@ function createChatListItem(group, loadChatMessages) {
     })
     .then((res) => res.json())
     .then((res) => {
+        var hour, minute, period, time;
+        let currentDay = new Date(Date.now());
+        let dateTest = new Date(res.latestMessage.date);
+
+        if (dateTest.getFullYear() === currentDay.getFullYear() && dateTest.getMonth() === currentDay.getMonth() && dateTest.getDate() === currentDay.getDate()) {
+            hour = dateTest.getHours();
+            minute = dateTest.getMinutes();
+
+            if (hour === 0) {
+                hour = 12;
+                period = "am";
+            }
+            else if (hour <= 11) {
+                period = "am";
+            }
+            else if (hour === 12) {
+                period = "pm";
+            }
+            else {
+                hour -= 12;
+                period = "pm";
+            }
+            time = hour + ":" + minute + " " + period
+        }
+        else {
+            let checkYesterday = new Date(currentDay.getFullYear(), currentDay.getMonth(), currentDay.getDate());
+            checkYesterday.setDate(checkYesterday.getDate() - 1);
+            if (dateTest >= checkYesterday) {
+                time = "Yesterday";
+            }
+            else {
+                let checkWeek = new Date(currentDay.getFullYear(), currentDay.getMonth(), currentDay.getDate());
+                checkWeek.setDate(checkWeek.getDate() - checkWeek.getDay());
+                const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+                if (dateTest >= checkWeek) {
+                    time = days[dateTest.getDay()];
+                }
+                else {
+                    time = dateTest.getDate() + "/" + dateTest.getMonth() + "/" + dateTest.getFullYear().toString().substring(2);
+                }
+            }
+        }
+        
+
         if (res.message) {
-            let group = document.createElement('div');
-            group.className = "group";
-            group.id = group.id;
-            group.onclick = loadChatMessages;
+            let groupItem = document.createElement('div');
+            groupItem.className = "group";
+            groupItem.id = group.id;
+            groupItem.onclick = loadChatMessages;
 
             let title = document.createElement('div');
             title.className = 'groupChatButtonContainerTitle';
@@ -196,16 +238,16 @@ function createChatListItem(group, loadChatMessages) {
 
             mostRecentMessage.appendChild(message);
             mostRecentMessage.appendChild(timeStamp);
-            group.appendChild(title);
-            group.appendChild(mostRecentMessage);
-            console.log(group);
-            // document.getElementById('groupChatButtonContainer').insertBefore(group, document.getElementById('endOfChatsList'));
+            groupItem.appendChild(title);
+            groupItem.appendChild(mostRecentMessage);
+            // console.log(groupItem);
+            document.getElementById('groupChatButtonContainer').insertBefore(groupItem, document.getElementById('endOfChatsList'));
         }
         else {
-            let group = document.createElement('div');
-            group.className = "group";
-            group.id = group.id;
-            group.onclick = loadChatMessages;
+            let groupItem = document.createElement('div');
+            groupItem.className = "group";
+            groupItem.id = group.id;
+            groupItem.onclick = loadChatMessages;
 
             let title = document.createElement('div');
             title.className = 'groupChatButtonContainerTitle';
@@ -216,18 +258,18 @@ function createChatListItem(group, loadChatMessages) {
 
             let message = document.createElement('div');
             message.className = 'message';
-            message.innerHTML = res.content;
+            message.innerHTML = res.latestMessage.content;
 
             let timeStamp = document.createElement('div');
             timeStamp.className = 'timeStamp';
-            timeStamp.innerHTML = Date.parse(res.date);
+            timeStamp.innerHTML = time;
 
             mostRecentMessage.appendChild(message);
             mostRecentMessage.appendChild(timeStamp);
-            group.appendChild(title);
-            group.appendChild(mostRecentMessage);
-            console.log(group);
-            // document.getElementById('groupChatButtonContainer').insertBefore(group, document.getElementById('endOfChatsList'));
+            groupItem.appendChild(title);
+            groupItem.appendChild(mostRecentMessage);
+            // console.log(groupItem);
+            document.getElementById('groupChatButtonContainer').insertBefore(groupItem, document.getElementById('endOfChatsList'));
         }
     })
 }

@@ -1122,7 +1122,7 @@ app.get('/read-latest-message', (req, res) => {
     }
   }
   console.log(latestMessage);
-  res.send({ message: latestMessage });
+  res.send({ latestMessage });
 });
 app.post('/read-latest-message', (req, res) => {
   const { id } = req.body;
@@ -1142,7 +1142,7 @@ app.post('/read-latest-message', (req, res) => {
     }
   }
   console.log(latestMessage);
-  res.send({ message: latestMessage });
+  res.send({ latestMessage });
 });
 
 
