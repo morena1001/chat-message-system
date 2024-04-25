@@ -80,8 +80,9 @@ export const Register = (props) => {
         .then((r) => {
             if ('success' === r.message) {
                 localStorage.setItem('user', JSON.stringify({ email, token: r.token }));
+                props.setUsername(username);
                 props.setLoggedIn(true);
-                navigate('/');
+                navigate('/', props)
             }
             else {
                 setRegisterError('Error occured. Try again');

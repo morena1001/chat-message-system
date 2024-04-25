@@ -172,50 +172,6 @@ function createChatListItem(group, loadChatMessages) {
     })
     .then((res) => res.json())
     .then((res) => {
-        var hour, minute, period, time;
-        let currentDay = new Date(Date.now());
-        let dateTest = new Date(res.latestMessage.date);
-
-        if (dateTest.getFullYear() === currentDay.getFullYear() && dateTest.getMonth() === currentDay.getMonth() && dateTest.getDate() === currentDay.getDate()) {
-            hour = dateTest.getHours();
-            minute = dateTest.getMinutes();
-
-            if (hour === 0) {
-                hour = 12;
-                period = "am";
-            }
-            else if (hour <= 11) {
-                period = "am";
-            }
-            else if (hour === 12) {
-                period = "pm";
-            }
-            else {
-                hour -= 12;
-                period = "pm";
-            }
-            time = hour + ":" + minute + " " + period
-        }
-        else {
-            let checkYesterday = new Date(currentDay.getFullYear(), currentDay.getMonth(), currentDay.getDate());
-            checkYesterday.setDate(checkYesterday.getDate() - 1);
-            if (dateTest >= checkYesterday) {
-                time = "Yesterday";
-            }
-            else {
-                let checkWeek = new Date(currentDay.getFullYear(), currentDay.getMonth(), currentDay.getDate());
-                checkWeek.setDate(checkWeek.getDate() - checkWeek.getDay());
-                const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-                if (dateTest >= checkWeek) {
-                    time = days[dateTest.getDay()];
-                }
-                else {
-                    time = dateTest.getDate() + "/" + dateTest.getMonth() + "/" + dateTest.getFullYear().toString().substring(2);
-                }
-            }
-        }
-        
-
         if (res.message) {
             let groupItem = document.createElement('div');
             groupItem.className = "group";
@@ -244,6 +200,49 @@ function createChatListItem(group, loadChatMessages) {
             document.getElementById('groupChatButtonContainer').insertBefore(groupItem, document.getElementById('endOfChatsList'));
         }
         else {
+            var hour, minute, period, time;
+            let currentDay = new Date(Date.now());
+            let dateTest = new Date(res.latestMessage.date);
+
+            if (dateTest.getFullYear() === currentDay.getFullYear() && dateTest.getMonth() === currentDay.getMonth() && dateTest.getDate() === currentDay.getDate()) {
+                hour = dateTest.getHours();
+                minute = dateTest.getMinutes();
+
+                if (hour === 0) {
+                    hour = 12;
+                    period = "am";
+                }
+                else if (hour <= 11) {
+                    period = "am";
+                }
+                else if (hour === 12) {
+                    period = "pm";
+                }
+                else {
+                    hour -= 12;
+                    period = "pm";
+                }
+                time = hour + ":" + minute + " " + period
+            }
+            else {
+                let checkYesterday = new Date(currentDay.getFullYear(), currentDay.getMonth(), currentDay.getDate());
+                checkYesterday.setDate(checkYesterday.getDate() - 1);
+                if (dateTest >= checkYesterday) {
+                    time = "Yesterday";
+                }
+                else {
+                    let checkWeek = new Date(currentDay.getFullYear(), currentDay.getMonth(), currentDay.getDate());
+                    checkWeek.setDate(checkWeek.getDate() - checkWeek.getDay());
+                    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+                    if (dateTest >= checkWeek) {
+                        time = days[dateTest.getDay()];
+                    }
+                    else {
+                        time = dateTest.getDate() + "/" + dateTest.getMonth() + "/" + dateTest.getFullYear().toString().substring(2);
+                    }
+                }
+            }
+
             let groupItem = document.createElement('div');
             groupItem.className = "group";
             groupItem.id = group.id;

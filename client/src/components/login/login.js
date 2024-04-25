@@ -80,8 +80,9 @@ export const Login = (props) => {
         .then((r) => {
             if ('success' === r.message) {
                 localStorage.setItem('user', JSON.stringify({ username, token: r.token }));
+                props.setUsername(username);
                 props.setLoggedIn(true);
-                navigate('/');
+                navigate('/', props);
             }
             else {
                 setLoginError('Password is incorrect. Try again');
@@ -91,7 +92,7 @@ export const Login = (props) => {
 
     useEffect(() => {
         if(props.loggedIn) {
-            navigate("/");
+            navigate('/', props);
         }
     })
     

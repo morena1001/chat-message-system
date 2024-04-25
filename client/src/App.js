@@ -35,9 +35,9 @@ function App() {
     <>
       <Router>
         <Routes>
-          <Route path='/' element={ <Home username={username} loggedIn={loggedIn} setLoggedIn={setLoggedIn} /> } />
-          <Route path='/login' element={ <Login username={username} loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUsername={username} /> } />
-          <Route path='/register' element={ <Register username={username} loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUsername={username} /> } />
+          <Route path='/' element={ <Home username={username} setUsername={setUsername} loggedIn={loggedIn} setLoggedIn={setLoggedIn} /> } />
+          <Route path='/login' element={ <Login username={username} loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUsername={setUsername} /> } />
+          <Route path='/register' element={ <Register username={username} loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUsername={setUsername} /> } />
           <Route path='/profile/:id' element={ <Profile /> } />
           {/* <Route path='/shows/:id' Component={Resource} />
           <Route path='/new' Component={CreateResource} /> */}
