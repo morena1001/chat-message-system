@@ -23,6 +23,8 @@ body {
 
 .rightSideContainer {
     border: 1px solid black;
+    display: flex;
+    flex-direction: column;
     border-left: none;
     width: 100%;
     height: 98vh;
@@ -212,4 +214,86 @@ body {
     font-size: 12px;
     margin-left: 4px;
     margin-top: 6px;
+}
+
+.groupChatMessagesContainer {
+    overflow-y: auto;
+    flex-grow: 2;
+    display: flex;
+    flex-direction: column;
+    scrollbar-width: none;
+}
+
+.singleMessage {
+    /* border: 1px solid black; */
+    background-color: rgb(206, 178, 122);
+    /* rgb(179, 142, 68); */
+    /* rgb(221, 180, 97) */
+
+    /* rgb(206, 178, 122) */
+    /* rgb(158, 140, 105) */
+    border-radius: 20px;
+    padding: 6px 10px 6px;
+    max-width: 20vw;
+    margin: 5px 0px 5px 8px;
+}
+
+.messageHeader {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.messageSender {
+    font-weight: bold;
+}
+
+.messageTimeStamp {
+    font-size: 12px;
+    margin-top: 2px;
+}
+
+.newMessageContainer {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid;
+    padding: 8px 8px;
+}
+
+.newMessageTextBox {
+    border: 1px solid black;
+    background-color: white;
+    border-radius: 20px;
+    font-family: inherit;
+    padding: 6px 8px;
+    font-size: 16px;
+    flex-grow: 2;
+    display: flex;
+    margin-right: 3px;
+}
+
+.NewMessageSendButton {
+    border: 1px solid black;
+    background-color: white;
+    border-radius: 50%;
+    font-family: inherit;
+    padding: 4px 6px;
+    font-size: 16px;
+    cursor: pointer;
+    height: 30px;
+    width: 30px;
+    margin-left: 3px;
+}
+
+.NewMessageSendButton:hover {
+    background-color: rgb(185, 141, 69);
+    color: white;
+}
+
+.newMessageSendIcon {
+    position: absolute;
+    margin-left: -9px;
+    margin-top: -8px;
+    /* margin-left: -6.5px; */
+    /* margin-top: -8px; */
 }

@@ -16,15 +16,11 @@ export const Home = (props) => {
         }
     };
 
-    const loadChatMessages = (e) => {
-        console.log("LOADED MESSAGES " + e);
-    };
-
     useEffect(() => {
         if (!loggedIn) {
             navigate("/login");
         }
-        setup(username, loadChatMessages);
+        setup(username);
     });
 
     return(
@@ -94,13 +90,420 @@ export const Home = (props) => {
                             </div>
                         </div>
                     </div>
+                    <div className="groupChatMessagesContainer" id='groupChatMessagesContainer'>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender">
+                                    Kira Linderg
+                                </div>
+                                <div className="messageTimeStamp">
+                                    11:20 pm
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                                I feel alone
+                            </div>
+                        </div>
+
+                    </div>
+                    <div className="newMessageContainer">
+                        {/* <div className="newMessageTextBoxContainer"> */}
+                            <input type="text" className="newMessageTextBox" />
+                        {/* </div> */}
+                        {/* <div className="newMessageSendButtonContainer"> */}
+                            <button className="NewMessageSendButton" id='NewMessageSendButton'><i className="fa-solid fa-paper-plane newMessageSendIcon"></i></button>
+                            {/* <div className="searchAndFilterWrapper">
+                                <input type="text" className="searchBar" />
+                                <div className="filter">
+                                    <button className="filterButton" id='filterButton'><i className="fa-solid fa-message messageIcon"></i></button>
+                                </div>
+                            </div> */}
+                        {/* </div> */}
+                    </div>
                 </div>
             </div>
         </>
     );
 }
 
-function setup(username, loadChatMessages) {
+function setup(username) {
     document.getElementById("newChatButton").addEventListener("click", function (e) {
         e.preventDefault();
     });
@@ -150,11 +553,11 @@ function setup(username, loadChatMessages) {
                         .then((res) => res.json())
                         .then((res4) => {
                             res3.name = res4.user;
-                            createChatListItem(res3, loadChatMessages);
+                            createChatListItem(res3);
                         });
                     }
                     else {
-                        createChatListItem(res3, loadChatMessages);
+                        createChatListItem(res3);
                     }
                 });
             });
@@ -162,7 +565,7 @@ function setup(username, loadChatMessages) {
     });
 }
 
-function createChatListItem(group, loadChatMessages) {
+function createChatListItem(group) {
     fetch('/read-latest-message', {
         method: 'POST',
         headers: {
@@ -176,7 +579,7 @@ function createChatListItem(group, loadChatMessages) {
             let groupItem = document.createElement('div');
             groupItem.className = "group";
             groupItem.id = group.id;
-            groupItem.onclick = loadChatMessages;
+            groupItem.onclick = function() { loadChatMessages(group) };
 
             let title = document.createElement('div');
             title.className = 'groupChatButtonContainerTitle';
@@ -197,7 +600,7 @@ function createChatListItem(group, loadChatMessages) {
             groupItem.appendChild(title);
             groupItem.appendChild(mostRecentMessage);
             // console.log(groupItem);
-            document.getElementById('groupChatButtonContainer').insertBefore(groupItem, document.getElementById('endOfChatsList'));
+            // document.getElementById('groupChatButtonContainer').insertBefore(groupItem, document.getElementById('endOfChatsList'));
         }
         else {
             var hour, minute, period, time;
@@ -246,7 +649,7 @@ function createChatListItem(group, loadChatMessages) {
             let groupItem = document.createElement('div');
             groupItem.className = "group";
             groupItem.id = group.id;
-            groupItem.onclick = loadChatMessages;
+            groupItem.onclick = function() { loadChatMessages(group) };
 
             let title = document.createElement('div');
             title.className = 'groupChatButtonContainerTitle';
@@ -268,7 +671,21 @@ function createChatListItem(group, loadChatMessages) {
             groupItem.appendChild(title);
             groupItem.appendChild(mostRecentMessage);
             // console.log(groupItem);
-            document.getElementById('groupChatButtonContainer').insertBefore(groupItem, document.getElementById('endOfChatsList'));
+            // document.getElementById('groupChatButtonContainer').insertBefore(groupItem, document.getElementById('endOfChatsList'));
         }
     })
+}
+
+function loadChatMessages(group) {
+    fetch('/read-chat-messages', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }, 
+        body: JSON.stringify({ id: group.id })
+    })
+    .then((res) => res.json()) 
+    .then((res) => {
+        console.log(res.messages);
+    });
 }
