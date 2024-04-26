@@ -225,16 +225,12 @@ body {
 }
 
 .singleMessage {
-    /* border: 1px solid black; */
     background-color: rgb(206, 178, 122);
-    /* rgb(179, 142, 68); */
-    /* rgb(221, 180, 97) */
-
-    /* rgb(206, 178, 122) */
-    /* rgb(158, 140, 105) */
+    /* rgb(206, 178, 122) For the other senders' messages */
+    /* rgb(177, 156, 115) For the user's messages */
     border-radius: 20px;
     padding: 6px 10px 6px;
-    max-width: 20vw;
+    width: 20vw;
     margin: 5px 0px 5px 8px;
 }
 
@@ -251,6 +247,29 @@ body {
 .messageTimeStamp {
     font-size: 12px;
     margin-top: 2px;
+}
+
+.EditMessageButton {
+    border: 1px solid black;
+    background-color: white;
+    /* border-radius: 20px; */
+    border-radius: 50%;
+    height: 17px;
+    width: 17px;
+    font-family: inherit;
+    font-size: 10px;
+    cursor: pointer;
+    margin-left: 6px;
+}
+
+.EditMessageButton:hover {
+    background-color: rgb(185, 141, 69);
+    color: white;
+}
+
+.editMessageIcon {
+    position: relative;
+    left: -3.5px;
 }
 
 .newMessageContainer {
@@ -296,4 +315,10 @@ body {
     margin-top: -8px;
     /* margin-left: -6.5px; */
     /* margin-top: -8px; */
+}
+
+.userMessage {
+    align-self: flex-end;
+    width: 20vw;
+    background-color: rgb(177, 156, 115);
 }
