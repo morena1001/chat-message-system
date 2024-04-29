@@ -232,6 +232,8 @@ body {
     padding: 6px 10px 6px;
     width: 20vw;
     margin: 5px 0px 5px 8px;
+
+    display: none;
 }
 
 .messageHeader {
@@ -260,6 +262,8 @@ body {
     font-size: 10px;
     cursor: pointer;
     margin-left: 6px;
+
+    display: none;
 }
 
 .editMessageButton:hover {

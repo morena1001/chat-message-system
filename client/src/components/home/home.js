@@ -85,7 +85,7 @@ export const Home = (props) => {
                     <div className="rightSideWrapper">
                         <div className="headerContainer">
                             <div className="headerWrapper">
-                                <div className="chatTitle" id='chatTitle'>Kira Linderg</div>
+                                <div className="chatTitle" id='chatTitle'></div>
                                 <div className="chatOptions">
                                     <button className="chatOptionsButton" id='optionsButton'><i className="fa-solid fa-ellipsis-vertical chatOptionsIcon"></i></button>
                                 </div>
@@ -93,46 +93,61 @@ export const Home = (props) => {
                         </div>
                     </div>
                     <div className="groupChatMessagesContainer" id='groupChatMessagesContainer'>
-                        {/* <div className="singleMessage userMessage" id='singleMessage'>
+                        <div className="singleMessage" id='singleMessage'>
                             <div className="messageHeader">
-                                <div className="messageSender">
-                                    You
-                                </div>
+                                <div className="messageSender"></div>
                                 <div className="messageTimeStamp">
-                                    11:20 pm
-                                    <button className="EditMessageButton" id='EditMessageButton'><i className="fa-solid fa-pencil editMessageIcon"></i></button>
+                                    <span className="timeStampSpan"></span>
+                                    <button className="editMessageButton" id='editMessageButton'><i className="fa-solid fa-pencil editMessageIcon"></i></button>
                                 </div>
                             </div>
                             <div className="messageContent">
-                                I feel alone
                             </div>
                         </div>
                         <div className="singleMessage" id='singleMessage'>
                             <div className="messageHeader">
-                                <div className="messageSender">
-                                    Kira Linderg
-                                </div>
+                                <div className="messageSender"></div>
                                 <div className="messageTimeStamp">
-                                    11:23 pm
+                                    <span className="timeStampSpan"></span>
+                                    <button className="editMessageButton" id='editMessageButton'><i className="fa-solid fa-pencil editMessageIcon"></i></button>
                                 </div>
                             </div>
                             <div className="messageContent">
-                                me too.
                             </div>
                         </div>
                         <div className="singleMessage" id='singleMessage'>
                             <div className="messageHeader">
-                                <div className="messageSender">
-                                    Kira Linderg
-                                </div>
+                                <div className="messageSender"></div>
                                 <div className="messageTimeStamp">
-                                    11:23 pm
+                                    <span className="timeStampSpan"></span>
+                                    <button className="editMessageButton" id='editMessageButton'><i className="fa-solid fa-pencil editMessageIcon"></i></button>
                                 </div>
                             </div>
                             <div className="messageContent">
-                                Want to feel alone together?
                             </div>
-                        </div> */}
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender"></div>
+                                <div className="messageTimeStamp">
+                                    <span className="timeStampSpan"></span>
+                                    <button className="editMessageButton" id='editMessageButton'><i className="fa-solid fa-pencil editMessageIcon"></i></button>
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                            </div>
+                        </div>
+                        <div className="singleMessage" id='singleMessage'>
+                            <div className="messageHeader">
+                                <div className="messageSender"></div>
+                                <div className="messageTimeStamp">
+                                    <span className="timeStampSpan"></span>
+                                    <button className="editMessageButton" id='editMessageButton'><i className="fa-solid fa-pencil editMessageIcon"></i></button>
+                                </div>
+                            </div>
+                            <div className="messageContent">
+                            </div>
+                        </div>
                     </div>
                     <div className="newMessageContainer">
                             <input type="text" className="newMessageTextBox" />
@@ -320,7 +335,9 @@ function createChatListItem(group) {
 
 function loadChatMessages(group) {
     document.getElementById('chatTitle').innerHTML = group.name;
-    document.getElementById('groupChatMessagesContainer').innerHTML = "";
+    // document.getElementById('groupChatMessagesContainer').innerHTML = "";
+    // MAKE IT SO THAT AFTER A MESSAGE IS CREATED, DON'T ERASE IT, AND KEEP A MAX OF 5. 
+
 
     fetch('/read-chat-messages', {
         method: 'POST',
@@ -331,10 +348,99 @@ function loadChatMessages(group) {
     })
     .then((res) => res.json()) 
     .then((res) => {
-        res.messages.forEach(element => {
-            createMessageItem(element);
-        });
+        // res.messages.forEach(element => {
+        //     console.log(element);
+        //     // createMessageItem(element);
+        //     loadMessageItem(element);
+        // });
+
+        for (let i = 0; i < 5; i++) {
+            if (i >= res.messages.length) {
+                resetMessageItem(i);
+            }
+            else {
+                loadMessageItem(res.messages[i], i);
+            }
+        }
     });
+}
+
+function loadMessageItem(messageInfo, i) {
+    var sender, timeStamp;
+    var messageElementItem = document.getElementById('groupChatMessagesContainer').children[i];
+
+    var hour, minute, period;
+    let currentDay = new Date(Date.now());
+    let dateTest = new Date(messageInfo.date);
+
+    if (dateTest.getFullYear() === currentDay.getFullYear() && dateTest.getMonth() === currentDay.getMonth() && dateTest.getDate() === currentDay.getDate()) {
+        hour = dateTest.getHours();
+        minute = dateTest.getMinutes();
+
+        if (hour === 0) {
+            hour = 12;
+            period = "am";
+        }
+        else if (hour <= 11) {
+            period = "am";
+        }
+        else if (hour === 12) {
+            period = "pm";
+        }
+        else {
+            hour -= 12;
+            period = "pm";
+        }
+        timeStamp = hour + ":" + minute + " " + period
+    }
+    else {
+        let checkYesterday = new Date(currentDay.getFullYear(), currentDay.getMonth(), currentDay.getDate());
+        checkYesterday.setDate(checkYesterday.getDate() - 1);
+        if (dateTest >= checkYesterday) {
+            timeStamp = "Yesterday";
+        }
+        else {
+            let checkWeek = new Date(currentDay.getFullYear(), currentDay.getMonth(), currentDay.getDate());
+            checkWeek.setDate(checkWeek.getDate() - checkWeek.getDay());
+            const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            if (dateTest >= checkWeek) {
+                timeStamp = days[dateTest.getDay()];
+            }
+            else {
+                timeStamp = dateTest.getDate() + "/" + dateTest.getMonth() + "/" + dateTest.getFullYear().toString().substring(2);
+            }
+        }
+    }
+
+    fetch('/read-username', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: messageInfo.userId })
+    })
+    .then((res1) => res1.json())
+    .then((res1) => {
+        sender = res1.username;
+
+        messageElementItem.className = userId === messageInfo.userId ? "singleMessage userMessage" : "singleMessage";
+        messageElementItem.firstElementChild.firstElementChild.innerHTML = userId === messageInfo.userId ? "You" : sender;
+        messageElementItem.firstElementChild.lastElementChild.firstElementChild.innerHTML = timeStamp;
+        messageElementItem.firstElementChild.lastElementChild.lastElementChild.style.display = userId === messageInfo.userId ? "inline" : "none";
+        messageElementItem.lastElementChild.innerHTML = messageInfo.content;
+        messageElementItem.style.display = "inline";
+    });
+}
+
+function resetMessageItem(i) {
+    var messageElementItem = document.getElementById('groupChatMessagesContainer').children[i];
+
+    messageElementItem.className = "singleMessage";
+    messageElementItem.firstElementChild.firstElementChild.innerHTML = "";
+    messageElementItem.firstElementChild.lastElementChild.firstElementChild.innerHTML = "";
+    messageElementItem.firstElementChild.lastElementChild.lastElementChild.style.display = "none";
+    messageElementItem.lastElementChild.innerHTML = "";
+    messageElementItem.style.display = "none";
 }
 
 function createMessageItem(messageInfo) {
@@ -428,7 +534,7 @@ function createMessageItem(messageInfo) {
         messageItem.appendChild(messageHeader);
         messageItem.appendChild(messageContent);
 
-        console.log(messageItem);
+        // console.log(messageItem);
         document.getElementById('groupChatMessagesContainer').appendChild(messageItem);
     });
 }
