@@ -85,7 +85,7 @@ export const Home = (props) => {
                     <div className="rightSideWrapper">
                         <div className="headerContainer">
                             <div className="headerWrapper">
-                                <div className="chatTitle">Kira Linderg</div>
+                                <div className="chatTitle" id='chatTitle'>Kira Linderg</div>
                                 <div className="chatOptions">
                                     <button className="chatOptionsButton" id='optionsButton'><i className="fa-solid fa-ellipsis-vertical chatOptionsIcon"></i></button>
                                 </div>
@@ -319,6 +319,9 @@ function createChatListItem(group) {
 }
 
 function loadChatMessages(group) {
+    document.getElementById('chatTitle').innerHTML = group.name;
+    document.getElementById('groupChatMessagesContainer').innerHTML = "";
+
     fetch('/read-chat-messages', {
         method: 'POST',
         headers: {
@@ -331,47 +334,6 @@ function loadChatMessages(group) {
         res.messages.forEach(element => {
             createMessageItem(element);
         });
-
-        // <div className="singleMessage userMessage" id='singleMessage'>
-        //     <div className="messageHeader">
-        //         <div className="messageSender">
-        //             You
-        //         </div>
-        //         <div className="messageTimeStamp">
-        //             11:20 pm
-        //             <button className="EditMessageButton" id='EditMessageButton'><i className="fa-solid fa-pencil editMessageIcon"></i></button>
-        //         </div>
-        //     </div>
-        //     <div className="messageContent">
-        //         I feel alone
-        //     </div>
-        // </div>
-        // <div className="singleMessage" id='singleMessage'>
-        //     <div className="messageHeader">
-        //         <div className="messageSender">
-        //             Kira Linderg
-        //         </div>
-        //         <div className="messageTimeStamp">
-        //             11:23 pm
-        //         </div>
-        //     </div>
-        //     <div className="messageContent">
-        //         me too.
-        //     </div>
-        // </div>
-        // <div className="singleMessage" id='singleMessage'>
-        //     <div className="messageHeader">
-        //         <div className="messageSender">
-        //             Kira Linderg
-        //         </div>
-        //         <div className="messageTimeStamp">
-        //             11:23 pm
-        //         </div>
-        //     </div>
-        //     <div className="messageContent">
-        //         Want to feel alone together?
-        //     </div>
-        // </div>
     });
 }
 
@@ -433,9 +395,46 @@ function createMessageItem(messageInfo) {
     .then((res1) => res1.json())
     .then((res1) => {
         sender = res1.username;
+
+        let messageItem = document.createElement('div');
+        messageItem.className = userId === messageInfo.userId ? "singleMessage userMessage" : "singleMessage";
+        messageItem.id = "singleMessage";
+
+        let messageHeader = document.createElement('div');
+        messageHeader.className = "messageHeader";
+
+        let messageSender = document.createElement('div');
+        messageSender.className = "messageSender";
+        messageSender.innerHTML = userId === messageInfo.userId ? "You" : sender;
         
+        let messageTimeStamp = document.createElement('div');
+        messageTimeStamp.className = "messageTimeStamp";
+        messageTimeStamp.innerHTML = timeStamp;
+
+        let editMessageButton = document.createElement('button');
+        editMessageButton.className = "editMessageButton";
+        editMessageButton.id = "editMessageButton";
+
+        let editMessageIcon = document.createElement('i');
+        editMessageIcon.className = "fa-solid fa-pencil editMessageIcon";
+
+        let messageContent = document.createElement('div');
+        messageContent.innerHTML = messageInfo.content;
+
+        editMessageButton.appendChild(editMessageIcon); 
+        messageTimeStamp.appendChild(editMessageButton);
+        messageHeader.appendChild(messageSender);
+        messageHeader.appendChild(messageTimeStamp);
+        messageItem.appendChild(messageHeader);
+        messageItem.appendChild(messageContent);
+
+        console.log(messageItem);
+        document.getElementById('groupChatMessagesContainer').appendChild(messageItem);
     });
 }
+
+
+
 
 
 // readMessageSender(messageInfo).then(data => {
