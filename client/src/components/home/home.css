@@ -72,7 +72,7 @@ body {
 
 .icon {
     position: absolute;
-    margin-left: -6.5px;
+    margin-left: -6.75px;
     margin-top: -8px;
 }
 
@@ -97,7 +97,7 @@ body {
 
 .optionsIcon {
     position: absolute;
-    margin-left: -1.5px;
+    margin-left: -1.75px;
     margin-top: -8px;
 }
 
@@ -231,7 +231,7 @@ body {
     border-radius: 20px;
     padding: 6px 10px 6px;
     width: 20vw;
-    margin: 5px 0px 5px 8px;
+    margin: 5px 8px;
 
     display: none;
 }
@@ -325,4 +325,95 @@ body {
     align-self: flex-end;
     width: 20vw;
     background-color: rgb(177, 156, 115);
+}
+
+
+
+.chatInfoPanelContainer {
+    right: 9px;
+    position: absolute;
+    /* display: flex; */
+    flex-direction: column;
+    display: none;
+}
+
+.chatInfoPanel {
+    position: inherit;
+    width: 30vw;
+    height: 92.2vh;
+    background-color: rgb(199, 170, 132);
+    align-self: flex-end;
+    z-index: 1;
+    border-left: 1px solid black;
+}
+
+.chatInfoPanelHeader {
+    display: flex;
+    margin-top: 5px;
+}
+
+.panelChatOptionsButton {
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 50%;
+    font-size: 14px;
+    cursor: pointer;
+    width: 24px;
+    height: 24px; 
+    margin-left: 6px;
+}
+
+.panelChatOptionsButton:hover {
+    background-color: rgb(185, 141, 69);
+    color: white;
+}
+
+.chatPanelIcon {
+    position:absolute;
+    margin-left: -5.25px;
+    margin-top: -6.7px;
+}
+
+.chatTitlePanel {
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.chatInfoPanelMembers {
+    margin-top: 12px;
+    margin-left: 6px;
+}
+
+.chatInfoPanelMembersTitle {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.chatInfoPanelMembersContainer {
+    /* margin-top: -8px; */
+    margin-top: 2px;
+    /* margin-right: 6px; */
+}
+
+.memberItem {
+    display: flex;
+    justify-content: space-between;
+}
+
+.userProfileLink {
+    font-size: 14px;
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+}
+
+.userProfileLink:hover {
+    color: black;
+}
+
+.memberStatus {
+    font-size: 14px;
+    text-decoration: none;
+    color: rgb(255, 255, 255);
 }

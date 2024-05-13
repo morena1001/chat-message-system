@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './home.css';
+import { SingleMemberItem, TrialAndError } from './testLink';
 
 var userId;
 
 export const Home = (props) => {
+    // const [togglePanel, setTogglePanel] = useState(false);
+    const togglePanel = useRef(false);
     const { loggedIn, username } = props;
     const navigate = useNavigate();
     let face = "( |ᆺ| )";
@@ -18,12 +21,17 @@ export const Home = (props) => {
         }
     };
 
+    const toggleChatPanel = () => {
+        togglePanel.current = !togglePanel.current;
+        document.getElementById('chatInfoPanelContainer').style.display = togglePanel.current ? 'flex' : 'none';
+    }
+
     useEffect(() => {
         if (!loggedIn) {
             navigate("/login");
         }
-        setup(username);
-    });
+        setup(username, toggleChatPanel);
+    }, []);
 
     return(
         <>
@@ -87,7 +95,23 @@ export const Home = (props) => {
                             <div className="headerWrapper">
                                 <div className="chatTitle" id='chatTitle'></div>
                                 <div className="chatOptions">
-                                    <button className="chatOptionsButton" id='optionsButton'><i className="fa-solid fa-ellipsis-vertical chatOptionsIcon"></i></button>
+                                    <button className="chatOptionsButton" id='chatOptionsButton' onClick={toggleChatPanel}><i className="fa-solid fa-ellipsis-vertical chatOptionsIcon"></i></button>
+                                </div>
+                                <div className="chatInfoPanelContainer" id='chatInfoPanelContainer'>
+                                    <div className="chatInfoPanel">
+                                        <div className="chatInfoPanelHeader">
+                                            <button className="panelChatOptionsButton" id='panelCloseButton' onClick={toggleChatPanel}><i className="fa-solid fa-x chatPanelIcon"></i></button>
+                                            <div className="chatTitlePanel" id='chatTitlePanel'>
+                                            </div>
+                                        </div>
+                                        <div className="chatInfoPanelMembers">
+                                            <div className="chatInfoPanelMembersTitle">
+                                                Members
+                                            </div>
+                                            <div className="chatInfoPanelMembersContainer" id='chatInfoPanelMembersContainer'>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -159,16 +183,24 @@ export const Home = (props) => {
     );
 }
 
-function setup(username) {
+function setup(username, toggleChatPanel) {
     document.getElementById("newChatButton").addEventListener("click", function (e) {
         e.preventDefault();
     });
     document.getElementById("optionsButton").addEventListener("click", function (e) {
         e.preventDefault();
     });
+    document.getElementById('chatOptionsButton').addEventListener('click', function(e) {
+        e.preventDefault();
+    });
+    document.getElementById('panelCloseButton').addEventListener("click", function(e) {
+        e.preventDefault();
+    });
     document.getElementById("filterButton").addEventListener("click", function(e) {
         e.preventDefault();
     });
+
+    document.getElementById('chatOptionsButton').style.display = 'none';
 
     fetch('/read-user-id', {
         method: 'POST',
@@ -210,11 +242,11 @@ function setup(username) {
                         .then((res) => res.json())
                         .then((res4) => {
                             res3.name = res4.user;
-                            createChatListItem(res3);
+                            createChatListItem(res3, toggleChatPanel);
                         });
                     }
                     else {
-                        createChatListItem(res3);
+                        createChatListItem(res3, toggleChatPanel);
                     }
                 });
             });
@@ -222,7 +254,7 @@ function setup(username) {
     });
 }
 
-function createChatListItem(group) {
+function createChatListItem(group, toggleChatPanel) {
     fetch('/read-latest-message', {
         method: 'POST',
         headers: {
@@ -236,7 +268,7 @@ function createChatListItem(group) {
             let groupItem = document.createElement('div');
             groupItem.className = "group";
             groupItem.id = group.id;
-            groupItem.onclick = function() { loadChatMessages(group) };
+            groupItem.onclick = function() { loadChatMessages(group, toggleChatPanel) };
 
             let title = document.createElement('div');
             title.className = 'groupChatButtonContainerTitle';
@@ -306,7 +338,7 @@ function createChatListItem(group) {
             let groupItem = document.createElement('div');
             groupItem.className = "group";
             groupItem.id = group.id;
-            groupItem.onclick = function() { loadChatMessages(group) };
+            groupItem.onclick = function() { loadChatMessages(group, toggleChatPanel) };
 
             let title = document.createElement('div');
             title.className = 'groupChatButtonContainerTitle';
@@ -333,10 +365,76 @@ function createChatListItem(group) {
     })
 }
 
-function loadChatMessages(group) {
+function loadChatMessages(group, toggleChatPanel) {
+    document.getElementById('chatOptionsButton').style.display = 'inline';
     document.getElementById('chatTitle').innerHTML = group.name;
+    document.getElementById('chatTitlePanel').innerHTML = group.name;
+
+    if (document.getElementById('chatInfoPanelContainer').style.display === "flex") {
+        toggleChatPanel();
+    }
+
     // document.getElementById('groupChatMessagesContainer').innerHTML = "";
     // MAKE IT SO THAT AFTER A MESSAGE IS CREATED, DON'T ERASE IT, AND KEEP A MAX OF 5. 
+
+    fetch('/read-group-info', {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: group.id })
+    })
+    .then((res) => res.json())
+    .then((res) => {
+        document.getElementById('chatInfoPanelMembersContainer').innerHTML = "";
+        // console.log(res.members);
+        res.members.forEach(element => {
+            if (element !== userId) {
+                fetch('/read-username', {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id: element })
+                })
+                .then((res2) => res2.json()) 
+                .then((res2) => {
+                    let adminStatus = res.admins.includes(element);
+                    // document.getElementById('').innerHTML += '<SingleMemberItem memberId='+ element + ' memberUsername=' + res2.username + ' adminStatus=' + adminStatus + ' />';
+
+                    let memberItem = document.createElement("div");
+                    memberItem.className = "memberItem";
+
+                    let memberLink = document.createElement('a');
+                    memberLink.className = "userProfileLink";
+                    memberLink.href="/profile/" + element;
+                    memberLink.innerHTML = res2.username;
+
+                    let memberStatus = document.createElement('div');
+                    memberStatus.className = "memberStatus";
+                    memberStatus.innerHTML = adminStatus ? "Admin" : "";
+
+                    memberItem.appendChild(memberLink);
+                    memberItem.appendChild(memberStatus);
+                    
+                    document.getElementById('chatInfoPanelMembersContainer').appendChild(memberItem);
+                                                
+                    {/* <div className="memberItem">
+                        <a href="/profile/2" className='userProfileLink'>AH</a>
+                    </div> 
+
+                    <div className="memberItem">
+                        <Link to='/profile/2' className='userProfileLink'>
+                            AH
+                        </Link>
+                        <div className="memberStatus">
+                            Admin
+                        </div>
+                    </div> */}
+                });
+            }
+        })
+    })
 
 
     fetch('/read-chat-messages', {
