@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './home.css';
-import { SingleMemberItem, TrialAndError } from './testLink';
 
 var userId;
 
@@ -13,6 +12,10 @@ export const Home = (props) => {
     let face = "( |ᆺ| )";
     let meow = "nyaaa";
 
+    const newChatButtonClick = () => {
+        navigate('/new_chat');
+    }
+    
     const onButtonClick = () => {
         if (loggedIn) {
             localStorage.removeItem("user");
@@ -48,7 +51,7 @@ export const Home = (props) => {
                                 <div className="usernameTitle">{username}</div>
                                 <div className="headerButtons">
                                     <div className="newChat">
-                                        <button className="newChatButton" id='newChatButton'><i className="fa-solid fa-plus icon"></i></button>
+                                        <button className="newChatButton" id='newChatButton' onClick={newChatButtonClick}><i className="fa-solid fa-plus icon"></i></button>
                                     </div>
                                     <div className="options">
                                         <button className="optionsButton" id='optionsButton' onClick={onButtonClick}><i className="fa-solid fa-ellipsis-vertical optionsIcon"></i></button>

@@ -2,8 +2,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Home } from './components/home/home';
 import { Login } from './components/login/login';
-import { Register } from './components/Register/register';
+import { Register } from './components/register/register';
 import { Profile } from './components/profile/profile';
+import { NewChat } from './components/new_chat/new_chat';
 import './App.css';
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
           <Route path='/login' element={ <Login username={username} loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUsername={setUsername} /> } />
           <Route path='/register' element={ <Register username={username} loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUsername={setUsername} /> } />
           <Route path='/profile/:id' element={ <Profile /> } />
+          <Route path='/new_chat' element={ <NewChat /> }/>
           {/* <Route path='/shows/:id' Component={Resource} />
           <Route path='/new' Component={CreateResource} /> */}
         </Routes>
