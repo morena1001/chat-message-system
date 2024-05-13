@@ -288,7 +288,7 @@ function createChatListItem(group, toggleChatPanel) {
             mostRecentMessage.appendChild(timeStamp);
             groupItem.appendChild(title);
             groupItem.appendChild(mostRecentMessage);
-            // console.log(groupItem);
+
             document.getElementById('groupChatButtonContainer').insertBefore(groupItem, document.getElementById('endOfChatsList'));
         }
         else {
@@ -359,7 +359,6 @@ function createChatListItem(group, toggleChatPanel) {
             mostRecentMessage.appendChild(timeStamp);
             groupItem.appendChild(title);
             groupItem.appendChild(mostRecentMessage);
-            // console.log(groupItem);
             document.getElementById('groupChatButtonContainer').insertBefore(groupItem, document.getElementById('endOfChatsList'));
         }
     })
@@ -387,7 +386,6 @@ function loadChatMessages(group, toggleChatPanel) {
     .then((res) => res.json())
     .then((res) => {
         document.getElementById('chatInfoPanelMembersContainer').innerHTML = "";
-        // console.log(res.members);
         res.members.forEach(element => {
             if (element !== userId) {
                 fetch('/read-username', {
@@ -400,7 +398,6 @@ function loadChatMessages(group, toggleChatPanel) {
                 .then((res2) => res2.json()) 
                 .then((res2) => {
                     let adminStatus = res.admins.includes(element);
-                    // document.getElementById('').innerHTML += '<SingleMemberItem memberId='+ element + ' memberUsername=' + res2.username + ' adminStatus=' + adminStatus + ' />';
 
                     let memberItem = document.createElement("div");
                     memberItem.className = "memberItem";
@@ -418,19 +415,6 @@ function loadChatMessages(group, toggleChatPanel) {
                     memberItem.appendChild(memberStatus);
                     
                     document.getElementById('chatInfoPanelMembersContainer').appendChild(memberItem);
-                                                
-                    {/* <div className="memberItem">
-                        <a href="/profile/2" className='userProfileLink'>AH</a>
-                    </div> 
-
-                    <div className="memberItem">
-                        <Link to='/profile/2' className='userProfileLink'>
-                            AH
-                        </Link>
-                        <div className="memberStatus">
-                            Admin
-                        </div>
-                    </div> */}
                 });
             }
         })
@@ -447,7 +431,6 @@ function loadChatMessages(group, toggleChatPanel) {
     .then((res) => res.json()) 
     .then((res) => {
         // res.messages.forEach(element => {
-        //     console.log(element);
         //     // createMessageItem(element);
         //     loadMessageItem(element);
         // });
@@ -542,8 +525,6 @@ function resetMessageItem(i) {
 }
 
 function createMessageItem(messageInfo) {
-    // console.log(messageInfo);
-
     var sender, timeStamp;
 
     var hour, minute, period;
@@ -632,48 +613,6 @@ function createMessageItem(messageInfo) {
         messageItem.appendChild(messageHeader);
         messageItem.appendChild(messageContent);
 
-        // console.log(messageItem);
         document.getElementById('groupChatMessagesContainer').appendChild(messageItem);
     });
 }
-
-
-
-
-
-// readMessageSender(messageInfo).then(data => {
-//     sender = data.username;
-//     console.log(data.username);
-// })
-// let senderUsernamePromise = new Promise(function(resolve) {
-    //     const res = fetch('/read-username', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify({ id: messageInfo.userId })
-    //     })
-    //     .then((res) => res.json())
-    //     .then((res) => { resolve(res) })
-    // });
-
-    // senderUsernamePromise.then(
-    //     function(value) { sender = value.username }
-    // )
-
-    // console.log(sender);
-// async function readMessageSender(e) {
-//     // const response = await fetch("/shows");
-//     // const data = await response.json();
-//     // return data;
-
-//     const res = await fetch('/read-username', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify({ id: e.userId })
-//     });
-//     const data = await res.json();
-//     return data;
-// }
