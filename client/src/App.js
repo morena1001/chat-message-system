@@ -40,7 +40,7 @@ function App() {
           <Route path='/login' element={ <Login username={username} loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUsername={setUsername} /> } />
           <Route path='/register' element={ <Register username={username} loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUsername={setUsername} /> } />
           <Route path='/profile/:id' element={ <Profile /> } />
-          <Route path='/new_chat' element={ <NewChat /> }/>
+          <Route path='/new_chat' element={ <NewChat username={username} loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUsername={setUsername} /> }/>
           {/* <Route path='/shows/:id' Component={Resource} />
           <Route path='/new' Component={CreateResource} /> */}
         </Routes>

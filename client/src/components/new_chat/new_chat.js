@@ -2,11 +2,49 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, Link, useParams } from 'react-router-dom';
 import './new_chat.css';
 
-export const NewChat = () => {
+export const NewChat = (props) => {
+    const { loggedIn } = props;
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!loggedIn) {
+            let localUser = JSON.parse(localStorage.getItem('user'));
+
+            if (!localUser) {
+                navigate('/login');
+            }
+
+            fetch('/verify', {
+                method: "POST",
+                headers: {
+                    "jwt-token": localUser.token
+                }
+            })
+            .then((res) => res.json())
+            .then((res) => {
+                if (res.message !== "success") {
+                    navigate("/login");
+                }
+            });
+        }
+    }, []);
+
     return (
         <>
             <div className="mainContainer">
                 <div className="mainWrapper">
+                    <div className="chooseUsersContainer">
+                        <div className="choseUsersTitle">
+                            Users
+                        </div>
+                        <input type="text" className="memberInputBox" placeholder='Enter the username of the users here'/>
+                        <div className="possibleSearchedUser">
+                            Enter the username of the users
+                        </div>
+                        <div className="searchedUsers">
+                        </div>
+                    </div>
+
                     <div className="titleInputContainer">
                         {/* <input type="text" className="titleInputBox" placeholder='Enter the title here' /> */}
                     </div>

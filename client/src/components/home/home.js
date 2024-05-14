@@ -13,7 +13,7 @@ export const Home = (props) => {
     let meow = "nyaaa";
 
     const newChatButtonClick = () => {
-        navigate('/new_chat');
+        navigate('/new_chat', props);
     }
     
     const onButtonClick = () => {
