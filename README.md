@@ -9,8 +9,8 @@ admin2Password
 #### *FRONTEND DEVELOPMENT TIMELINE*
 
 - ~View group chats on left side and messages on right side~
-- View group members and group admins
-- View individual user profiles
+- ~View group members and group admins~
+- ~View individual user profiles~
 - Create new chats (both individual and group)
 - Create new messages (Send messages)
 - Update user information (email, username, password, delete account)
